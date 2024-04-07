@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "778162270106",
+    "project_id": "nuncare-aa7c4",
+    "storage_bucket": "nuncare-aa7c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778162270106:android:c9818bfda7ae441c991423",
+        "android_client_info": {
+          "package_name": "com.example.nuncare_mobile_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFuISMhXq2hWp2OxRsSlKhAlCgCuNBTno"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
