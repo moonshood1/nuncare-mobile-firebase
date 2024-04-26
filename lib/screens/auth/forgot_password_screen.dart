@@ -1,32 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
-import 'package:nuncare_mobile_firebase/screens/auth/password_creation_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/register_screen.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';
 
-class PasswordResetScreen extends StatefulWidget {
-  const PasswordResetScreen({super.key});
+class ForgotPwScreen extends StatefulWidget {
+  const ForgotPwScreen({super.key});
 
   @override
-  State<PasswordResetScreen> createState() => _PasswordResetScreenState();
+  State<ForgotPwScreen> createState() => _ForgotPwScreenState();
 }
 
-class _PasswordResetScreenState extends State<PasswordResetScreen> {
-  // var _isLoading = false;
+class _ForgotPwScreenState extends State<ForgotPwScreen> {
+  var _isLoading = false;
+  final _auth = AuthService();
   final TextEditingController _emailController = TextEditingController();
-  void _submit() {
-    final String? emailError = validateEmail(_emailController.text);
-    if (emailError != null) {
-      // Afficher un message d'erreur ou réaliser toute autre action pour indiquer à l'utilisateur que le champ email est invalide
-      return;
-    }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (ctx) => const PasswordCreationScreen(),
-      ),
-    );
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _submit(BuildContext context) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final String? emailError = validateEmail(_emailController.text);
+
+      if (emailError != null) {
+        // Afficher un message d'erreur ou réaliser toute autre action pour indiquer à l'utilisateur que le champ email est invalide
+        return;
+      }
+
+      if (!context.mounted) {
+        return;
+      }
+
+      _auth.resetPassword(_emailController.text);
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print(e);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            e.toString(),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -83,7 +113,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _submit,
+                    onPressed: () => _submit(context),
                     style: ElevatedButton.styleFrom(
                       elevation: 2,
                       foregroundColor: Colors.white,

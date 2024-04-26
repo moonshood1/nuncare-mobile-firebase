@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/auth_gate.dart';
-import 'package:nuncare_mobile_firebase/screens/auth/password_reset_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/auth/forgot_password_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/register_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';
@@ -42,6 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
         _emailController.text.trim(),
         _pwController.text.trim(),
       );
+
+      /*
+
+      var result = await _auth.signIn(
+        _emailController.text.trim(),
+        _pwController.text.trim(),
+      );
+
+      if(result.user == null){
+        // connected
+      }else{
+        // not connected
+      } 
+ 
+      */
 
       Navigator.of(context).pop();
 
@@ -129,30 +145,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                // Align(
-                //   alignment: Alignment.centerRight,
-                //   child: TextButton(
-                //     onPressed: () {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (ctx) => const PasswordResetScreen(),
-                //         ),
-                //       );
-                //     },
-                //     child: Text(
-                //       'Mot de passe oublié ?',
-                //       style: TextStyle(
-                //         fontSize: 14,
-                //         fontWeight: FontWeight.w300,
-                //         color: Theme.of(context).colorScheme.primary,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const ForgotPwScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Mot de passe oublié ?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 _isLoading
                     ? const MyLoadingCirle()
                     : SizedBox(

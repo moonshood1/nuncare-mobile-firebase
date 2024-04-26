@@ -5,8 +5,8 @@ import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 
-class MessagePageScreen extends StatelessWidget {
-  MessagePageScreen({super.key});
+class UserMessagePageScreen extends StatelessWidget {
+  UserMessagePageScreen({super.key});
 
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
@@ -15,27 +15,37 @@ class MessagePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Messagerie',
-          style: TextStyle(color: Colors.black, fontSize: 17),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        title: const Text(
+          'Nouveau message',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      drawer: const Drawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: _buildChatList(),
+        child: _buildUserList(),
       ),
     );
   }
 
-  Widget _buildChatList() {
+  Widget _buildUserList() {
     return StreamBuilder(
       stream: _chatService.getUserStream(),
       builder: (ctx, snapshot) {
         // error
         if (snapshot.hasError) {
-          return const Text("Erreur au chargement des utilisateurs");
+          return const Text("Erreur au chargement des docteurs");
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +55,7 @@ class MessagePageScreen extends StatelessWidget {
         if (snapshot.data!.isEmpty) {
           return const Center(
             child: Text(
-              "Aucun utilisateur pour l'instant",
+              "Aucun docteur pour l'instant",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
             ),
           );

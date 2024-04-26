@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/login_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';
+import 'package:nuncare_mobile_firebase/validators/name_validator.dart';
 import 'package:nuncare_mobile_firebase/validators/password_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -21,12 +21,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   final TextEditingController _confirmPwController = TextEditingController();
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _pwController.dispose();
     _confirmPwController.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+
     super.dispose();
   }
 
@@ -36,40 +41,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _isLoading = true;
       });
 
-      _auth.signUp(
+      BasicResponse response = await _auth.signUp(
         _emailController.text.trim(),
         _pwController.text.trim(),
+        _firstnameController.text.trim(),
+        _lastnameController.text.trim(),
       );
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (!context.mounted) {
+        return;
+      }
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (ctx) => const LoginScreen(),
-        ),
-      );
+      if (response.success) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => const LoginScreen(),
+          ),
+        );
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.green.shade200,
-          content:
-              const Text("Inscription réussie , Connectez vous a present "),
+          content: Text(response.message),
           duration: const Duration(seconds: 4),
         ),
       );
+
+      return;
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            e.toString(),
-          ),
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade400,
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -101,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Text(
                   "Créez votre compte",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w300,
                     fontSize: 25,
                     fontFamily: "Roboto",
                   ),
@@ -112,6 +125,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Column(
                   children: [
+                    MyTextField(
+                      controller: _firstnameController,
+                      obscureText: false,
+                      isHidden: false,
+                      icon: Icons.person,
+                      labelText: 'Prénom',
+                      validator: (value) => validateName(value, 'Le prénom'),
+                      textCapitalization: TextCapitalization.words,
+                      autoCorrect: false,
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    MyTextField(
+                      controller: _lastnameController,
+                      obscureText: false,
+                      isHidden: false,
+                      icon: Icons.person,
+                      labelText: 'Nom',
+                      validator: (value) => validateName(value, "Le nom"),
+                      textCapitalization: TextCapitalization.words,
+                      autoCorrect: false,
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     MyTextField(
                       controller: _emailController,
                       obscureText: false,
@@ -191,7 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                 const SizedBox(
-                  height: 60,
+                  height: 30,
                 ),
                 const Text(
                   "Vous avez déja une compte ? ",

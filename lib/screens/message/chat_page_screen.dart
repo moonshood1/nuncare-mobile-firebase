@@ -11,9 +11,10 @@ class ChatPageScreen extends StatefulWidget {
     super.key,
     required this.receiverEmail,
     required this.receiverId,
+    required this.receiverName,
   });
 
-  final String receiverId, receiverEmail;
+  final String receiverId, receiverEmail, receiverName;
 
   @override
   State<ChatPageScreen> createState() => _ChatPageScreenState();
@@ -65,7 +66,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     if (_messageController.text.trim().isEmpty) {
       return;
     }
-    await _chatService.sendMessage(widget.receiverId, _messageController.text);
+    await _chatService.sendMessage(
+        widget.receiverId, _messageController.text, widget.receiverName);
     _messageController.clear();
     scrollDown();
   }
@@ -77,7 +79,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
         title: Text(
-          widget.receiverEmail,
+          widget.receiverName,
           style: const TextStyle(
             fontSize: 16,
           ),
