@@ -3,12 +3,12 @@ import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_tile.dart';
 import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
-import 'package:nuncare_mobile_firebase/services/chat_service.dart';
+import 'package:nuncare_mobile_firebase/services/user_service.dart';
 
 class UserMessagePageScreen extends StatelessWidget {
   UserMessagePageScreen({super.key});
 
-  final ChatService _chatService = ChatService();
+  final UserService _userService = UserService();
   final AuthService _authService = AuthService();
 
   @override
@@ -41,7 +41,7 @@ class UserMessagePageScreen extends StatelessWidget {
 
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: _chatService.getUserStream(),
+      stream: _userService.getUserStream(),
       builder: (ctx, snapshot) {
         // error
         if (snapshot.hasError) {
@@ -83,7 +83,7 @@ class UserMessagePageScreen extends StatelessWidget {
             builder: (ctx) => ChatPageScreen(
               receiverName: "${userData["firstName"]} ${userData["lastName"]}",
               receiverId: userData['uid'],
-              receiverEmail: userData["email"],
+              // receiverEmail: userData["email"],
             ),
           ),
         ),

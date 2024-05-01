@@ -4,17 +4,16 @@ import 'package:nuncare_mobile_firebase/components/my_chat_bubble.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
-import 'package:nuncare_mobile_firebase/services/chat_service.dart';
+import 'package:nuncare_mobile_firebase/services/user_service.dart';
 
 class ChatPageScreen extends StatefulWidget {
   const ChatPageScreen({
     super.key,
-    required this.receiverEmail,
     required this.receiverId,
     required this.receiverName,
   });
 
-  final String receiverId, receiverEmail, receiverName;
+  final String receiverId, receiverName;
 
   @override
   State<ChatPageScreen> createState() => _ChatPageScreenState();
@@ -23,7 +22,7 @@ class ChatPageScreen extends StatefulWidget {
 class _ChatPageScreenState extends State<ChatPageScreen> {
   final TextEditingController _messageController = TextEditingController();
 
-  final ChatService _chatService = ChatService();
+  final UserService _userService = UserService();
   final AuthService _auth = AuthService();
 
   FocusNode myFocusNode = FocusNode();
@@ -66,7 +65,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     if (_messageController.text.trim().isEmpty) {
       return;
     }
-    await _chatService.sendMessage(
+    await _userService.sendMessage(
         widget.receiverId, _messageController.text, widget.receiverName);
     _messageController.clear();
     scrollDown();
@@ -99,7 +98,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   Widget _buildMessageList() {
     String senderId = _auth.getCurrentUser()!.uid;
     return StreamBuilder(
-      stream: _chatService.getMessages(senderId, widget.receiverId),
+      stream: _userService.getMessages(senderId, widget.receiverId),
       builder: (ctx, snapshot) {
         if (snapshot.hasError) {
           return const Text("Erreur lors du chargement des messages");

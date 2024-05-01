@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/other/doctors_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 
@@ -24,21 +23,6 @@ class MyDrawer extends StatelessWidget {
               child: Image.asset(
                 'assets/images/title_nuncare.png',
                 scale: 2,
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => const DoctorPagescreen(),
-                  ),
-                );
-              },
-              leading: const Icon(Icons.people),
-              title: const Text(
-                "L'annuaire des medecins",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
               ),
             ),
             ListTile(

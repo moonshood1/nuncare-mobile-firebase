@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare_mobile_firebase/models/medecine_model.dart';
 
 class MyMedecineCard extends StatelessWidget {

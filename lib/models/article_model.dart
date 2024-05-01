@@ -5,13 +5,15 @@ class Article {
     required this.title,
     required this.description,
     this.authorId,
-    this.createdAt,
+    required this.createdAt,
     required this.content,
     required this.authorName,
+    this.likes,
   });
 
-  String? id, authorId, createdAt;
-  String img, title, description, content, authorName;
+  String? id, authorId;
+  String img, title, description, content, authorName, createdAt;
+  List<dynamic>? likes;
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
@@ -23,6 +25,7 @@ class Article {
       description: json['description'],
       createdAt: json['createdAt'],
       content: json['content'],
+      likes: List<dynamic>.from(json['likes']),
     );
   }
 
@@ -30,10 +33,7 @@ class Article {
     return {
       'img': img,
       'title': title,
-      'authorId': authorId,
-      'authorName': authorName,
       'description': description,
-      "createdAt": createdAt,
       'content': content,
     };
   }

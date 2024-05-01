@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart';
 import 'package:nuncare_mobile_firebase/screens/home/home_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/message/message_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/profile/profile_page_screen.dart';
@@ -27,10 +28,14 @@ class _RootPageScreenState extends State<RootPageScreen> {
 
     switch (activeScreen) {
       case 1:
-        screenWidget = MessagePageScreen();
+        screenWidget = const AnnuaryPageScreen();
 
         break;
       case 2:
+        screenWidget = MessagePageScreen();
+
+        break;
+      case 3:
         screenWidget = const ProfilePageScreen();
 
         break;
@@ -53,7 +58,12 @@ class _RootPageScreenState extends State<RootPageScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.message),
+            icon: const Icon(Icons.people),
+            label: "Annuaire",
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.chat_bubble),
             label: "Messagerie",
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),

@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 class Doctor {
-  String id;
+  String? id;
   String firstName;
   String lastName;
   String bio;
@@ -10,7 +8,6 @@ class Doctor {
   String speciality;
   int years;
   String img;
-  String cover;
   String phone;
   String region;
   String city;
@@ -18,12 +15,11 @@ class Doctor {
   double lng;
   double lat;
   String email;
-  String password;
   String orderNumber;
   bool isActive;
 
   Doctor({
-    required this.id,
+    this.id,
     required this.firstName,
     required this.lastName,
     required this.bio,
@@ -32,7 +28,6 @@ class Doctor {
     required this.speciality,
     required this.years,
     required this.img,
-    required this.cover,
     required this.phone,
     required this.region,
     required this.city,
@@ -40,14 +35,13 @@ class Doctor {
     required this.lat,
     required this.lng,
     required this.email,
-    required this.password,
     required this.orderNumber,
     required this.isActive,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
     return Doctor(
-      id: json['_id'],
+      id: json['uid'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       bio: json['bio'] ?? '',
@@ -56,7 +50,6 @@ class Doctor {
       speciality: json['speciality'],
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
-      cover: json['cover'] ?? '',
       phone: json['phone'],
       region: json['region'],
       city: json['city'],
@@ -64,7 +57,6 @@ class Doctor {
       lat: (json['lat'] ?? 0).toDouble(),
       lng: (json['lng'] ?? 0).toDouble(),
       email: json['email'],
-      password: json['password'],
       orderNumber: json['orderNumber'],
       isActive: json['isActive'],
     );
@@ -80,7 +72,6 @@ class Doctor {
       'speciality': speciality,
       'years': years,
       'img': img,
-      'cover': cover,
       'phone': phone,
       'region': region,
       'city': city,
@@ -88,7 +79,6 @@ class Doctor {
       'lat': lat,
       'lng': lng,
       'email': email,
-      'password': password,
       'orderNumber': orderNumber,
       'isActive': isActive,
     };
@@ -105,7 +95,6 @@ class Doctor {
       speciality: '',
       years: 0,
       img: '',
-      cover: '',
       phone: '',
       region: '',
       city: '',
@@ -113,7 +102,6 @@ class Doctor {
       lat: 0,
       lng: 0,
       email: '',
-      password: '',
       orderNumber: '',
       isActive: true,
     );

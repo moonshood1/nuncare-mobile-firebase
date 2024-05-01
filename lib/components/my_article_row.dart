@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/screens/other/article_page_screen.dart';
+import 'package:intl/intl.dart';
 
 class MyArticleRow extends StatelessWidget {
   const MyArticleRow({super.key, required this.article});
@@ -9,7 +10,8 @@ class MyArticleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String creation_date = article.createdAt.toString();
+    DateTime inputDate = DateTime.parse(article.createdAt);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(inputDate);
 
     return GestureDetector(
       onTap: () {
@@ -82,16 +84,16 @@ class MyArticleRow extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            '12',
-                            style: TextStyle(
-                              fontSize: 10,
+                          Text(
+                            article.likes!.length.toString(),
+                            style: const TextStyle(
+                              fontSize: 11,
                             ),
                           )
                         ],
                       ),
                       Text(
-                        creation_date,
+                        formattedDate,
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w300,

@@ -28,7 +28,7 @@ class _DiaryScreenPageState extends State<DiaryScreenPage> {
       setState(() {
         _isLoading = true;
       });
-      List<Article> response = await _resourceService.getArticles(limit: 20);
+      List<Article> response = await _resourceService.getArticles(size: 20);
 
       setState(() {
         articles = response;

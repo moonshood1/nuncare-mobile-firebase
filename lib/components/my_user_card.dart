@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:nuncare_mobile_firebase/models/message_model.dart';
-import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
+import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/other/doctor_profile_page_screen.dart';
 
-class MyChatTile extends StatelessWidget {
-  const MyChatTile({super.key, required this.message});
+class MyUserCard extends StatelessWidget {
+  const MyUserCard({super.key, required this.doctor});
 
-  final Message message;
+  final Doctor doctor;
 
   @override
   Widget build(BuildContext context) {
-    DateTime inputDate = DateTime.parse(message.messageTime!);
-
-    String formattedDate = DateFormat('dd-MM-yyyy - HH:mm').format(inputDate);
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (ctx) => ChatPageScreen(
-              receiverId: message.receiverId,
-              receiverName: message.receiverName,
+            builder: (ctx) => DoctorProfilePageScreen(
+              doctor: doctor,
             ),
           ),
         );
@@ -44,11 +38,23 @@ class MyChatTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.person),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        doctor.img,
+                      ),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   width: 10,
                 ),
-                Text(message.receiverName),
+                Text("${doctor.firstName} ${doctor.lastName}"),
               ],
             ),
             const SizedBox(
@@ -58,7 +64,7 @@ class MyChatTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  message.message,
+                  doctor.speciality,
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
@@ -69,7 +75,7 @@ class MyChatTile extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  formattedDate,
+                  doctor.address,
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w300,

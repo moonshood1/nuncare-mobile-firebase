@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 
 class ArticlePageScreen extends StatelessWidget {
@@ -8,6 +9,9 @@ class ArticlePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime inputDate = DateTime.parse(article.createdAt);
+    String formattedDate = DateFormat('dd-MM-yyyy').format(inputDate);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -79,7 +83,7 @@ class ArticlePageScreen extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          article.createdAt.toString(),
+                          formattedDate,
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w300,

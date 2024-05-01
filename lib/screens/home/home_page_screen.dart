@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_ad_card.dart';
-import 'package:nuncare_mobile_firebase/components/my_article_card.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_medecine_card.dart';
@@ -12,7 +11,6 @@ import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/news_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/notifications_page_screen.dart';
-import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -24,7 +22,6 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen> {
   final ResourceService _resourceService = ResourceService();
-  final AuthService _auth = AuthService();
 
   List<Ad> ads = [];
   List<Medecine> medecines = [];

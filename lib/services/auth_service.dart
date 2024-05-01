@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nuncare_mobile_firebase/constants/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:nuncare_mobile_firebase/constants/uris.dart';
 
 class BasicResponse {
   final bool success;
@@ -15,24 +15,11 @@ class BasicResponse {
 }
 
 class AuthService {
-  // Instance of auth & firestore
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // get current User
-
   User? getCurrentUser() {
     return _auth.currentUser;
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInformations(
-    String userId,
-  ) {
-    return _firestore.collection('Users').doc(userId).snapshots();
-  }
-
-  // sign in
   Future<UserCredential> signIn(String email, password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -48,8 +35,6 @@ class AuthService {
     }
   }
 
-  // sign up
-
   Future<BasicResponse> signUp(
     String email,
     password,
@@ -57,31 +42,7 @@ class AuthService {
     lastName,
   ) async {
     try {
-      final url = Uri.parse("$baseUrl/auth/register");
-
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
-
-      _firestore.collection("Users").doc(userCredential.user!.uid).set({
-        'uid': userCredential.user!.uid,
-        'email': email,
-        'firstName': firstName,
-        'lastName': lastName,
-        'bio': '',
-        'sex': '',
-        'hospital': '',
-        'speciality': '',
-        'years': 0,
-        'img': '',
-        'cover': '',
-        'phone': '',
-        'region': '',
-        'city': '',
-        'address': '',
-        'lat': 0,
-        'lng': 0,
-        'orderNumber': '',
-      });
+      final url = Uri.parse('$authUri/register');
 
       final response = await http.post(
         url,
@@ -91,7 +52,9 @@ class AuthService {
         body: json.encode(
           {
             'email': email,
-            'firebaseId': userCredential.user!.uid,
+            'firstName': firstName,
+            'lastName': lastName,
+            'password': password,
           },
         ),
       );
@@ -107,19 +70,13 @@ class AuthService {
         String errorMessage = responseData['message'];
         throw errorMessage;
       }
-    } on FirebaseAuthException catch (e) {
-      print("ERROR SIGN UP ");
-      print(e);
-
-      if (e.code == 'email-already-in-use') {
-        throw Exception("Ce compte existe déjà. Veuillez vous connecter");
-      }
-
-      throw Exception(e.code);
+    } catch (e) {
+      print('error inscription $e');
+      throw Exception(
+        "Une erreur s'est produite  lors de la création du compte",
+      );
     }
   }
-
-  // sign out
 
   Future<void> signOut() async {
     return await _auth.signOut();
@@ -134,6 +91,4 @@ class AuthService {
       throw Exception(e.code);
     }
   }
-
-  // errors
 }

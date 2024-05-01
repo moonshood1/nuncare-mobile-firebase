@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nuncare_mobile_firebase/components/my_category_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_card_row.dart';
-import 'package:nuncare_mobile_firebase/components/my_user_tile.dart';
-import 'package:nuncare_mobile_firebase/screens/home/home_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
-import 'package:nuncare_mobile_firebase/services/chat_service.dart';
+import 'package:nuncare_mobile_firebase/services/user_service.dart';
 
 class DoctorPagescreen extends StatefulWidget {
   const DoctorPagescreen({super.key});
@@ -15,7 +12,7 @@ class DoctorPagescreen extends StatefulWidget {
 }
 
 class _DoctorPagescreenState extends State<DoctorPagescreen> {
-  final ChatService _chatService = ChatService();
+  final UserService _userService = UserService();
   final AuthService _authService = AuthService();
 
   @override
@@ -44,7 +41,7 @@ class _DoctorPagescreenState extends State<DoctorPagescreen> {
         child:
             // MyCategoryRow(),
             StreamBuilder(
-          stream: _chatService.getUserStream(),
+          stream: _userService.getUserStream(),
           builder: (ctx, snapshot) {
             // error
             if (snapshot.hasError) {
@@ -80,7 +77,13 @@ class _DoctorPagescreenState extends State<DoctorPagescreen> {
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
     if (userData["email"] != _authService.getCurrentUser()!.email) {
-      return MyUserTile(text: userData["firstName"], onTap: () {});
+      return MyUserRow(
+        name: "${userData["firstName"]} ${userData["lastName"]}",
+        onTap: () {},
+        id: userData['uid'],
+        img:
+            "https://res.cloudinary.com/dhc0siki5/image/upload/v1710070251/nuncare/person_i8vdce.jpg",
+      );
     } else {
       return Container();
     }
