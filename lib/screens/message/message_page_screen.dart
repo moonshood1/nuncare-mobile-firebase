@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_chat_tile.dart';
+import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/models/message_model.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
@@ -74,7 +75,7 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
           style: TextStyle(color: Colors.black, fontSize: 17),
         ),
       ),
-      drawer: const Drawer(),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: messagesContent,

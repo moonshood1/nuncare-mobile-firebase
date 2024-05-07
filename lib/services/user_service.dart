@@ -5,6 +5,7 @@ import 'package:nuncare_mobile_firebase/models/message_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -30,6 +31,7 @@ class UserService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData['user']);
         final Doctor doctor = Doctor.fromJson(responseData['user']);
 
         return doctor;
@@ -49,20 +51,45 @@ class UserService {
     return _firestore.collection('Users').doc(userId).snapshots();
   }
 
-  Future<dynamic> updateUserInformations(
-      String field, String newValue, String userId) async {
+  Future<BasicResponse> updateUserInformations(
+      String field, dynamic value) async {
     try {
-      await _firestore
-          .collection('Users')
-          .doc(userId)
-          .update({field: newValue});
+      final url = Uri.parse("$usersUri?field=$field");
 
-      return;
-    } on FirebaseAuthException catch (e) {
-      print("ERROR UPDATING USER DATA ");
-      print(e);
+      final token = await _auth.currentUser?.getIdToken();
 
-      throw Exception(e.code);
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'value': value,
+          },
+        ),
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return BasicResponse(
+          success: responseData['success'],
+          message: responseData['message'],
+        );
+      } else {
+        String errorMessage = responseData['message'];
+        throw errorMessage;
+      }
+    } catch (e) {
+      print("Erreur modification informatioons : $e");
+
+      rethrow;
     }
   }
 

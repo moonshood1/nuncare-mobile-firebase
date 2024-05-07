@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_card.dart';
-import 'package:nuncare_mobile_firebase/components/my_user_card_row.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/annuary/location_screen_page.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
 class AnnuaryPageScreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
     }
   }
 
-  void searchDoctorsFromStore() async {
+  void _searchDoctorsFromStore() async {
     try {
       setState(() {
         _isLoading = true;
@@ -54,6 +55,40 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
     }
   }
 
+  void _searchDoctorsByLocationFromStore(String lat, String lng) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      List<Doctor> response = await _resourceService.localizeDoctors(lat, lng);
+
+      setState(() {
+        doctors = response;
+        _isLoading = false;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void _openSearchModal(BuildContext context) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      isScrollControlled: false,
+      backgroundColor: Colors.white,
+      builder: (ctx) => const LocationScreenPage(),
+    );
+
+    if (result != null) {
+      _searchDoctorsByLocationFromStore(
+        result["lat"].toString(),
+        result['lng'].toString(),
+      );
+    }
+  }
+
   @override
   void initState() {
     getDoctorsFromStore();
@@ -62,10 +97,26 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget doctorWidget = const Center(
-      child: Text(
-        "Aucun docteur dans l'annuaire",
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+    Widget doctorWidget = Center(
+      child: Column(
+        children: [
+          const Text(
+            "Aucun docteur dans l'annuaire",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextButton(
+            onPressed: getDoctorsFromStore,
+            child: const Text(
+              "Actualiser la liste",
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          )
+        ],
       ),
     );
 
@@ -78,30 +129,6 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
     if (doctors.isNotEmpty) {
       doctorWidget = Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //         child: TextField(
-          //           controller: _searchTextController,
-          //           decoration: const InputDecoration(
-          //             hintText: 'Rechercher un médecin...',
-          //             prefixIcon: Icon(Icons.search),
-          //             border: OutlineInputBorder(),
-          //           ),
-          //         ),
-          //       ),
-          //       // IconButton(
-          //       //   icon: const Icon(Icons.search),
-          //       //   onPressed: searchDoctorsFromStore,
-          //       // ),
-          //     ],
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 20,
-          // ),
           ...doctors.map(
             (doctor) => Padding(
               padding: const EdgeInsets.all(8.0),
@@ -120,10 +147,54 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
           style: TextStyle(color: Colors.black, fontSize: 17),
         ),
       ),
-      drawer: const Drawer(),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: SingleChildScrollView(child: doctorWidget),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: _searchTextController,
+                        decoration: InputDecoration(
+                          hintText: 'Rechercher un médecin...',
+                          suffixIcon: InkWell(
+                            onTap: _searchDoctorsFromStore,
+                            child: const Icon(
+                              Icons.search,
+                            ),
+                          ),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        _openSearchModal(context);
+                      },
+                      icon: const Icon(
+                        Icons.location_on,
+                        size: 40,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              doctorWidget
+            ],
+          ),
+        ),
       ),
     );
   }

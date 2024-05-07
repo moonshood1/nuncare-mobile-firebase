@@ -132,6 +132,8 @@ class ResourceService {
 
         final List<dynamic> articlesData = responseData['articles'] ?? [];
 
+        print("articles $articlesData");
+
         final List<Article> articles =
             articlesData.map((data) => Article.fromJson(data)).toList();
 
@@ -432,10 +434,17 @@ class ResourceService {
     try {
       final url = Uri.parse("$resourcesUri/doctors-search");
 
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
       final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
         body: json.encode(
           {
@@ -465,10 +474,17 @@ class ResourceService {
     try {
       final url = Uri.parse("$resourcesUri/doctors-localize?lat=$lat&lng=$lng");
 
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
       final response = await http.get(
         url,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
       );
 

@@ -23,40 +23,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login(BuildContext context) async {
     try {
-      // setState(() {
-      //   _isLoading = true;
-      // });
+      setState(() {
+        _isLoading = true;
+      });
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return Center(
+      //       child: CircularProgressIndicator(
+      //         color: Theme.of(context).colorScheme.primary,
+      //       ),
+      //     );
+      //   },
+      // );
 
       await _auth.signIn(
         _emailController.text.trim(),
         _pwController.text.trim(),
       );
-
-      /*
-
-      var result = await _auth.signIn(
-        _emailController.text.trim(),
-        _pwController.text.trim(),
-      );
-
-      if(result.user == null){
-        // connected
-      }else{
-        // not connected
-      } 
- 
-      */
 
       Navigator.of(context).pop();
 
@@ -76,12 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            e.toString(),
-          ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade400,
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -144,30 +128,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => const ForgotPwScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Mot de passe oublié ?',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (ctx) => const ForgotPwScreen(),
+                //         ),
+                //       );
+                //     },
+                //     child: Text(
+                //       'Mot de passe oublié ?',
+                //       style: TextStyle(
+                //         fontSize: 14,
+                //         fontWeight: FontWeight.w300,
+                //         color: Theme.of(context).colorScheme.primary,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 _isLoading
                     ? const MyLoadingCirle()
                     : SizedBox(

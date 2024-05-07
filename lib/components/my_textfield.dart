@@ -58,7 +58,7 @@ class _MyTextFieldState extends State<MyTextField> {
         labelText: widget.labelText,
         labelStyle: TextStyle(
           color: Theme.of(context).colorScheme.tertiary,
-          fontSize: 15,
+          fontSize: 14,
           fontWeight: FontWeight.w300,
         ),
         prefixIcon: Icon(

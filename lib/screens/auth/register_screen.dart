@@ -132,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       icon: Icons.person,
                       labelText: 'Prénom',
                       validator: (value) => validateName(value, 'Le prénom'),
-                      textCapitalization: TextCapitalization.words,
+                      textCapitalization: TextCapitalization.sentences,
                       autoCorrect: false,
                       keyboardType: TextInputType.text,
                     ),

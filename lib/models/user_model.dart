@@ -1,5 +1,6 @@
 class Doctor {
   String? id;
+  String firebaseId;
   String firstName;
   String lastName;
   String bio;
@@ -9,17 +10,23 @@ class Doctor {
   int years;
   String img;
   String phone;
-  String region;
   String city;
   String address;
   double lng;
   double lat;
   String email;
   String orderNumber;
+  String deviceId;
   bool isActive;
+
+  // city: ,
+  // address: ,
+  // lat
+  // lng
 
   Doctor({
     this.id,
+    required this.firebaseId,
     required this.firstName,
     required this.lastName,
     required this.bio,
@@ -29,7 +36,6 @@ class Doctor {
     required this.years,
     required this.img,
     required this.phone,
-    required this.region,
     required this.city,
     required this.address,
     required this.lat,
@@ -37,11 +43,13 @@ class Doctor {
     required this.email,
     required this.orderNumber,
     required this.isActive,
+    required this.deviceId,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
     return Doctor(
-      id: json['uid'],
+      id: json['_id'],
+      firebaseId: json['firebaseId'],
       firstName: json['firstName'],
       lastName: json['lastName'],
       bio: json['bio'] ?? '',
@@ -51,7 +59,6 @@ class Doctor {
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
       phone: json['phone'],
-      region: json['region'],
       city: json['city'],
       address: json['address'],
       lat: (json['lat'] ?? 0).toDouble(),
@@ -59,6 +66,7 @@ class Doctor {
       email: json['email'],
       orderNumber: json['orderNumber'],
       isActive: json['isActive'],
+      deviceId: json['deviceId'],
     );
   }
 
@@ -73,7 +81,6 @@ class Doctor {
       'years': years,
       'img': img,
       'phone': phone,
-      'region': region,
       'city': city,
       'address': address,
       'lat': lat,
@@ -87,6 +94,7 @@ class Doctor {
   factory Doctor.defaultDoctor() {
     return Doctor(
       id: '',
+      firebaseId: '',
       firstName: '',
       lastName: '',
       bio: '',
@@ -96,7 +104,6 @@ class Doctor {
       years: 0,
       img: '',
       phone: '',
-      region: '',
       city: '',
       address: '',
       lat: 0,
@@ -104,6 +111,7 @@ class Doctor {
       email: '',
       orderNumber: '',
       isActive: true,
+      deviceId: '',
     );
   }
 }

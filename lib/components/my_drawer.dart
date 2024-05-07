@@ -40,14 +40,14 @@ class MyDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
               ),
             ),
-            ListTile(
-              onTap: () {},
-              leading: const Icon(Icons.local_hospital),
-              title: const Text(
-                "Consultez les pharmacies",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-              ),
-            ),
+            // ListTile(
+            //   onTap: () {},
+            //   leading: const Icon(Icons.local_hospital),
+            //   title: const Text(
+            //     "Consultez les pharmacies",
+            //     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+            //   ),
+            // ),
             ListTile(
               onTap: () {
                 Navigator.push(

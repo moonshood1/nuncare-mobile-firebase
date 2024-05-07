@@ -50,3 +50,24 @@
 //     },
 //   );
 // }
+
+
+
+        // StreamBuilder<DocumentSnapshot>(
+        //   stream: _userService.getUserInformations(currentUser.uid),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasData) {
+        //       final userData = snapshot.data!.data() as Map<String, dynamic>;
+
+        //       return 
+              
+              
+
+            // } else if (snapshot.hasError) {
+            //   return Center(
+            //     child: Text(snapshot.error.toString()),
+            //   );
+            // } else {
+            //   return const MyLoadingCirle();
+            // }
+

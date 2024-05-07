@@ -78,6 +78,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
+        //iconTheme: IconThemeData(color: Colors.black),
         leading: null,
         backgroundColor: Colors.white,
         title: Image.asset(

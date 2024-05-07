@@ -57,10 +57,10 @@ class DoctorProfilePageScreen extends StatelessWidget {
               text: doctor.firstName,
               sectionName: 'Prénoms',
             ),
-            MyInfoBox(
-              text: doctor.orderNumber,
-              sectionName: "Numéro de d'ordre",
-            ),
+            // MyInfoBox(
+            //   text: doctor.orderNumber,
+            //   sectionName: "Numéro de d'ordre",
+            // ),
             MyInfoBox(
               text: doctor.phone,
               sectionName: 'Numéro de téléphone',

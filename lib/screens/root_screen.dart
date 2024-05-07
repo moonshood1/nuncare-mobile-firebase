@@ -32,7 +32,7 @@ class _RootPageScreenState extends State<RootPageScreen> {
 
         break;
       case 2:
-        screenWidget = MessagePageScreen();
+        screenWidget = const MessagePageScreen();
 
         break;
       case 3:

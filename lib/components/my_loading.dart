@@ -14,11 +14,15 @@ class MyLoadingCirle extends StatelessWidget {
   }
 }
 
-class MyLoadingDialog extends StatelessWidget {
-  const MyLoadingDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text('Chargement ...');
-  }
+void myLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      );
+    },
+  );
 }

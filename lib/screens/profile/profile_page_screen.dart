@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
+import 'package:nuncare_mobile_firebase/components/my_info_box.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
-import 'package:nuncare_mobile_firebase/components/my_text_box.dart';
-import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
+import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/profile/image_edit_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/profile/profile_edit_page_screen.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
-import 'package:nuncare_mobile_firebase/validators/name_validator.dart';
 
 class ProfilePageScreen extends StatefulWidget {
   const ProfilePageScreen({super.key});
@@ -16,62 +18,8 @@ class ProfilePageScreen extends StatefulWidget {
 
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
   final UserService _userService = UserService();
-  final TextEditingController _newValueController = TextEditingController();
   var _isLoading = false;
   Doctor currentUser = Doctor.defaultDoctor();
-
-  Future<void> editField(String field, String label, String labelText) async {
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Modification $label :",
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        content: MyTextField(
-          controller: _newValueController,
-          obscureText: false,
-          labelText: labelText,
-          validator: (value) => validateName(value, 'Le nom'),
-          isHidden: false,
-          autoCorrect: false,
-          keyboardType: TextInputType.name,
-          textCapitalization: TextCapitalization.none,
-          icon: Icons.person,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Annuler',
-              style: TextStyle(color: Colors.red.shade500),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(_newValueController.text);
-            },
-            child: const Text('Sauvegarder'),
-          )
-        ],
-      ),
-    );
-
-    if (_newValueController.text.trim().isNotEmpty) {
-      await _userService.updateUserInformations(
-        field,
-        _newValueController.text.trim(),
-        currentUser.id!,
-      );
-
-      _newValueController.clear();
-    }
-  }
 
   void getInformationsFromStore() async {
     try {
@@ -90,10 +38,120 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _newValueController.dispose();
-    super.dispose();
+  void _goToEditionPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => ProfileEditPageScreen(
+          doctor: currentUser,
+        ),
+      ),
+    );
+    if (result != null && result == true) {
+      getInformationsFromStore();
+    }
+  }
+
+  void _showImagesEditionModal(BuildContext context) async {
+    await showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      builder: (ctx) => _buildPhotoModal(context),
+    );
+  }
+
+  void _openImageEditionScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => ImageEditPageScreen(doctor: currentUser),
+      ),
+    );
+
+    if (result != null && result == true) {
+      getInformationsFromStore();
+    }
+  }
+
+  void _deleteImage(BuildContext context) async {
+    try {
+      final result = await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          scrollable: false,
+          title: const Text(
+            'Confirmation de suppression',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Etes-vous sur de vouloir supprimer votre photo de profil ?",
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text("Supprimer"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                "Annuler",
+                style: TextStyle(
+                  color: Colors.red.shade500,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+
+      if (result != null && result == true) {
+        BasicResponse response =
+            await _userService.updateUserInformations('img', defaultEmptyImg);
+
+        if (!context.mounted) {
+          return;
+        }
+
+        if (response.success) {
+          Navigator.pop(context);
+
+          getInformationsFromStore();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green.shade200,
+              content: Text(response.message),
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red.shade200,
+              content: Text(response.message),
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -110,7 +168,9 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           height: 20,
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _showImagesEditionModal(context);
+          },
           child: Container(
             width: 80,
             height: 80,
@@ -134,54 +194,58 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         const SizedBox(
           height: 40,
         ),
-        const Text("Mes informations"),
-        MyTextBox(
+        Row(
+          children: [
+            const Expanded(
+              child: Text("Mes informations"),
+            ),
+            TextButton.icon(
+              onPressed: _goToEditionPage,
+              icon: const Icon(Icons.edit),
+              label: const Text(
+                "Modifier le profil",
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+        MyInfoBox(
           text: currentUser.lastName,
           sectionName: 'Nom de famille',
-          onPressed: () => editField('lastName', 'du nom', "Nom"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.firstName,
           sectionName: 'Prénom',
-          onPressed: () => editField('firstName', 'du prénom', 'Prénom'),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.bio,
           sectionName: 'Bio',
-          onPressed: () => editField('bio', 'de la bio', "Bio"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.orderNumber,
           sectionName: "Numéro d'ordre",
-          onPressed: () => editField('hospital', "de l'hopital", "Hopital"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.hospital,
           sectionName: 'Hopital',
-          onPressed: () => editField('hospital', "de l'hopital", "Hopital"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.speciality,
           sectionName: 'Spécialité',
-          onPressed: () =>
-              editField('speciality', 'de la spécialité', "Spécialité"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.years.toString(),
           sectionName: "Années d'expérience",
-          onPressed: () => editField(
-              'years', "des années d'expérience", "Année d'experience"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.phone,
           sectionName: 'Téléphone',
-          onPressed: () => editField(
-              'phone', 'du numéro de téléphone', "Numéro de téléphone"),
         ),
-        MyTextBox(
+        MyInfoBox(
           text: currentUser.city,
           sectionName: 'Ville',
-          onPressed: () => editField('city', 'de la ville', "Ville"),
         ),
         const SizedBox(
           height: 40,
@@ -204,38 +268,58 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         ),
         backgroundColor: Colors.white,
       ),
-      drawer: const Drawer(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(
-          Icons.add,
-        ),
-      ),
+      drawer: MyDrawer(),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: const Icon(
+      //     Icons.add,
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: userContent,
       ),
     );
   }
+
+  Widget _buildPhotoModal(BuildContext context) {
+    return Container(
+      height: 150,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: const Icon(
+              Icons.photo,
+            ),
+            title: Text(
+              currentUser.img != ""
+                  ? "Modifier l'image de profil"
+                  : "Ajouter une image de profil",
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            onTap: _openImageEditionScreen,
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.delete,
+              color: Colors.red.shade300,
+            ),
+            title: const Text(
+              "Supprimer l'image de profil",
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            onTap: () => _deleteImage(context),
+          ),
+        ],
+      ),
+    );
+  }
 }
-
-
-
-
-        // StreamBuilder<DocumentSnapshot>(
-        //   stream: _userService.getUserInformations(currentUser.uid),
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasData) {
-        //       final userData = snapshot.data!.data() as Map<String, dynamic>;
-
-        //       return 
-              
-              
-
-            // } else if (snapshot.hasError) {
-            //   return Center(
-            //     child: Text(snapshot.error.toString()),
-            //   );
-            // } else {
-            //   return const MyLoadingCirle();
-            // }

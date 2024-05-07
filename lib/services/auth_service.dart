@@ -72,9 +72,7 @@ class AuthService {
       }
     } catch (e) {
       print('error inscription $e');
-      throw Exception(
-        "Une erreur s'est produite  lors de la création du compte",
-      );
+      rethrow;
     }
   }
 

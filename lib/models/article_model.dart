@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Article {
   Article({
     this.id,
@@ -9,11 +11,15 @@ class Article {
     required this.content,
     required this.authorName,
     this.likes,
+    required this.isDraft,
+    required this.isPublished,
+    required this.isActive,
   });
 
   String? id, authorId;
   String img, title, description, content, authorName, createdAt;
   List<dynamic>? likes;
+  bool isDraft, isPublished, isActive;
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
@@ -26,6 +32,9 @@ class Article {
       createdAt: json['createdAt'],
       content: json['content'],
       likes: List<dynamic>.from(json['likes']),
+      isDraft: json['isDraft'],
+      isPublished: json['isPublished'],
+      isActive: json['isActive'],
     );
   }
 
