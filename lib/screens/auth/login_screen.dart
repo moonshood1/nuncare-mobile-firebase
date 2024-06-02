@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/auth_gate.dart';
-import 'package:nuncare_mobile_firebase/screens/auth/forgot_password_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/register_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';

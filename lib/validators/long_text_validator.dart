@@ -1,8 +1,8 @@
-String? validateLongText(String? value, String? label) {
+String? validateLongText(String? value, String? label, double limit) {
   if (value == null || value.isEmpty) {
     return 'Veuillez entrer $label';
-  } else if (value.length < 20) {
-    return '$label doit contenir au moins 20 caractères';
+  } else if (value.length < limit) {
+    return '$label doit contenir au moins $limit caractères';
   }
   return null;
 }

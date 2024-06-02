@@ -93,77 +93,83 @@ class _LocationScreenPageState extends State<LocationScreenPage> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      child: Column(
-        children: [
-          _pickedAddress != ''
-              ? Text(
-                  _pickedAddress,
-                )
-              : const SizedBox(
-                  height: 10,
-                ),
-          const SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: 170,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            child: previewPosition,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton.icon(
-                label: const Text(
-                  "Position actuelle",
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w100,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        child: Column(
+          children: [
+            _pickedAddress != ''
+                ? Text(
+                    _pickedAddress,
+                  )
+                : const SizedBox(
+                    height: 10,
                   ),
-                ),
-                icon: Icon(
-                  Icons.location_on,
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 170,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(
                   color: Theme.of(context).colorScheme.primary,
+                  width: 2,
                 ),
-                onPressed: _getCurrentLocation,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop({'lng': _lng, 'lat': _lat});
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
+              alignment: Alignment.center,
+              child: previewPosition,
             ),
-            child: Text(
-              "Rechercher",
-              style: TextStyle(fontSize: 15),
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton.icon(
+                  label: const Text(
+                    "Position actuelle",
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                  icon: Icon(
+                    Icons.location_on,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: _getCurrentLocation,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop({'lng': _lng, 'lat': _lat});
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                "Rechercher",
+                style: TextStyle(fontSize: 15),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

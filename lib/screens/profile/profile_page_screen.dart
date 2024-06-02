@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_info_box.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
+import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
+import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/profile/article_edit_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/profile/image_edit_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/profile/profile_edit_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
@@ -19,7 +23,9 @@ class ProfilePageScreen extends StatefulWidget {
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
   final UserService _userService = UserService();
   var _isLoading = false;
+  var _isArticleLoading = false;
   Doctor currentUser = Doctor.defaultDoctor();
+  List<Article> articles = [];
 
   void getInformationsFromStore() async {
     try {
@@ -49,6 +55,18 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     );
     if (result != null && result == true) {
       getInformationsFromStore();
+    }
+  }
+
+  void _goToArticleCreationPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const ArticleEditPageScreen(),
+      ),
+    );
+    if (result != null && result == true) {
+      getUserArticlesFromStore();
     }
   }
 
@@ -154,9 +172,27 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
   }
 
+  void getUserArticlesFromStore() async {
+    try {
+      setState(() {
+        _isArticleLoading = true;
+      });
+
+      List<Article> response = await _userService.getUserArticles();
+
+      setState(() {
+        articles = response;
+        _isArticleLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     getInformationsFromStore();
+    getUserArticlesFromStore();
     super.initState();
   }
 
@@ -228,6 +264,10 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           sectionName: "Numéro d'ordre",
         ),
         MyInfoBox(
+          text: currentUser.promotion.toString(),
+          sectionName: "Promotion",
+        ),
+        MyInfoBox(
           text: currentUser.hospital,
           sectionName: 'Hopital',
         ),
@@ -243,14 +283,40 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           text: currentUser.phone,
           sectionName: 'Téléphone',
         ),
+        // MyInfoBox(
+        //   text: currentUser.city,
+        //   sectionName: 'Ville',
+        // ),
         MyInfoBox(
-          text: currentUser.city,
-          sectionName: 'Ville',
+          text: currentUser.region,
+          sectionName: 'Region',
         ),
         const SizedBox(
           height: 40,
         ),
-        const Text('Mes articles'),
+        Row(
+          children: [
+            const Expanded(
+              child: Text("Mes articles"),
+            ),
+            TextButton.icon(
+              onPressed: _goToArticleCreationPage,
+              icon: const Icon(Icons.add),
+              label: const Text(
+                "Créer un article",
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        _buildArticleList(
+          articles,
+        )
       ],
     );
 
@@ -321,5 +387,42 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildArticleList(List<Article> articles) {
+    if (_isArticleLoading == false && articles.isEmpty) {
+      return const Align(
+        alignment: Alignment.center,
+        child: Text(
+          "Aucun article disponible",
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
+      );
+    } else if (_isArticleLoading == true && articles.isEmpty) {
+      return const Column(
+        children: [
+          MyArticleSkeleton(),
+          SizedBox(
+            height: 40,
+          ),
+          MyArticleSkeleton(
+            height: 100,
+            width: double.infinity,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          for (final article in articles)
+            MyArticleRow(
+              article: article,
+            ),
+        ],
+      );
+    }
   }
 }

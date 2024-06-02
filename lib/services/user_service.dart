@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nuncare_mobile_firebase/constants/uris.dart';
+import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/message_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -218,6 +219,125 @@ class UserService {
       }
     } catch (e) {
       throw Exception("Erreur lors de l'enregistrement du chat room : $e");
+    }
+  }
+
+  Future<List<Article>> getUserArticles() async {
+    try {
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final url = Uri.parse("$usersUri/articles");
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        final List<dynamic> articlesData = responseData['articles'] ?? [];
+
+        final List<Article> articles =
+            articlesData.map((data) => Article.fromJson(data)).toList();
+
+        return articles;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw Exception(
+        "Erreur lors de la récupération des  de l'utilisateur : $error",
+      );
+    }
+  }
+
+  Future<BasicResponse> createArticle(
+    String title,
+    String description,
+    String content,
+    String img,
+  ) async {
+    try {
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final url = Uri.parse("$usersUri/articles-create");
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'title': title,
+            'description': description,
+            'content': content,
+            'img': img
+          },
+        ),
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return BasicResponse(
+          success: responseData['success'],
+          message: responseData['message'],
+        );
+      } else {
+        String errorMessage = responseData['message'];
+        throw errorMessage;
+      }
+    } catch (error) {
+      throw Exception(
+        "Erreur lors de création de l'article : $error",
+      );
+    }
+  }
+
+  Future<void> interractWithArticle(String articleId) async {
+    try {
+      final url = Uri.parse("$usersUri/article-interract");
+
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'id': articleId,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        return;
+      }
+    } catch (e) {
+      throw Exception("Erreur lors de l'enregistrement du like : $e");
     }
   }
 }

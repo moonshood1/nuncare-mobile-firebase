@@ -132,8 +132,6 @@ class ResourceService {
 
         final List<dynamic> articlesData = responseData['articles'] ?? [];
 
-        print("articles $articlesData");
-
         final List<Article> articles =
             articlesData.map((data) => Article.fromJson(data)).toList();
 
@@ -531,5 +529,42 @@ class ResourceService {
       print("Error getting articles: $error");
       throw error;
     });
+  }
+
+  Future<List<Doctor>> searchDoctorsWithParameters(
+    String region,
+    String speciality,
+    String promotion,
+  ) async {
+    final url = Uri.parse(
+      "$resourcesUri/doctors-custom-search?region=$region&speciality=$speciality&promotion=$promotion",
+    );
+
+    final token = await _auth.currentUser?.getIdToken();
+
+    if (token == null) {
+      throw Exception('Token non disponible');
+    }
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<dynamic> doctorsData = responseData['doctors'] ?? [];
+
+      final List<Doctor> doctors =
+          doctorsData.map((data) => Doctor.fromJson(data)).toList();
+
+      return doctors;
+    } else {
+      return [];
+    }
   }
 }

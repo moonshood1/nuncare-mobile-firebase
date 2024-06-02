@@ -13,6 +13,7 @@ class MyTextField extends StatefulWidget {
     required this.textCapitalization,
     required this.icon,
     this.focusNode,
+    this.maxLines,
   });
 
   final TextEditingController controller;
@@ -23,6 +24,7 @@ class MyTextField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final IconData icon;
   final FocusNode? focusNode;
+  final int? maxLines;
 
   @override
   State<MyTextField> createState() => _MyTextFieldState();
@@ -45,6 +47,7 @@ class _MyTextFieldState extends State<MyTextField> {
       controller: widget.controller,
       obscureText: _obscureText,
       keyboardType: widget.keyboardType,
+      maxLines: widget.maxLines,
       autocorrect: widget.autoCorrect,
       textCapitalization: widget.textCapitalization,
       onChanged: (value) => setState(() {

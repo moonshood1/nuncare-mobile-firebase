@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nuncare_mobile_firebase/screens/auth/login_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/auth/slider_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/root_screen.dart';
 
 class AuthGate extends StatelessWidget {
@@ -15,7 +15,7 @@ class AuthGate extends StatelessWidget {
           if (snapshot.hasData) {
             return const RootPageScreen();
           } else {
-            return const LoginScreen();
+            return const SliderScreen();
           }
         },
       ),

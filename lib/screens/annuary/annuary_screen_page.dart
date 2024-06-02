@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
-import 'package:nuncare_mobile_firebase/components/my_loading.dart';
+import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_card.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/annuary/custom_annuary_screen_search_page.dart';
 import 'package:nuncare_mobile_firebase/screens/annuary/location_screen_page.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
@@ -72,6 +73,32 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
     }
   }
 
+  void _searchDoctorsWithParametersFromStore(
+    String region,
+    String speciality,
+    String promotion,
+  ) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      List<Doctor> response =
+          await _resourceService.searchDoctorsWithParameters(
+        region.trim(),
+        speciality.trim(),
+        promotion,
+      );
+
+      setState(() {
+        doctors = response;
+        _isLoading = false;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
   void _openSearchModal(BuildContext context) async {
     final result = await showModalBottomSheet(
       useSafeArea: true,
@@ -85,6 +112,24 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
       _searchDoctorsByLocationFromStore(
         result["lat"].toString(),
         result['lng'].toString(),
+      );
+    }
+  }
+
+  void _openCustomSearchModal(BuildContext context) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      isScrollControlled: false,
+      backgroundColor: Colors.white,
+      builder: (ctx) => const CustomAnnuaryScreenPage(),
+    );
+
+    if (result != null) {
+      _searchDoctorsWithParametersFromStore(
+        result["region"],
+        result['speciality'],
+        result['promotion'].toString(),
       );
     }
   }
@@ -120,9 +165,19 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
       ),
     );
 
-    if (_isLoading && doctors.isEmpty) {
-      doctorWidget = const Center(
-        child: MyLoadingCirle(),
+    if (_isLoading == true && doctors.isEmpty) {
+      doctorWidget = const Column(
+        children: [
+          MyDoctorCardSkeleton(),
+          SizedBox(height: 10),
+          MyDoctorCardSkeleton(),
+          SizedBox(height: 10),
+          MyDoctorCardSkeleton(),
+          SizedBox(height: 10),
+          MyDoctorCardSkeleton(),
+          SizedBox(height: 10),
+          MyDoctorCardSkeleton(),
+        ],
       );
     }
 
@@ -146,50 +201,99 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
           'Annuaire des medecins',
           style: TextStyle(color: Colors.black, fontSize: 17),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _openSearchModal(context);
+            },
+            icon: const Icon(
+              Icons.location_on,
+              size: 30,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              _openCustomSearchModal(context);
+            },
+            icon: const Icon(
+              Icons.tune,
+              size: 30,
+            ),
+          ),
+        ],
       ),
       drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: TextField(
-                        controller: _searchTextController,
-                        decoration: InputDecoration(
-                          hintText: 'Rechercher un médecin...',
-                          suffixIcon: InkWell(
-                            onTap: _searchDoctorsFromStore,
-                            child: const Icon(
-                              Icons.search,
-                            ),
-                          ),
-                          border: const OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _openSearchModal(context);
-                      },
-                      icon: const Icon(
-                        Icons.location_on,
-                        size: 40,
-                      ),
-                    ),
-                  ],
+              const Text(
+                'Tous les medecins de Nuncare',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(
                 height: 20,
+              ),
+              const Text(
+                "Retrouvez tous les medecins inscrits sur la plateforme en recherchant par nom dans la barre de recherche",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: TextField(
+                      controller: _searchTextController,
+                      decoration: InputDecoration(
+                        hintStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        hintText: "Entrez le nom d'un médecin",
+                        suffixIcon: InkWell(
+                          onTap: _searchDoctorsFromStore,
+                          child: const Icon(
+                            Icons.search,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const Text(
+                'Les medecins de Nuncare',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Les derniers medecins inscrits sur la plateforme',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               doctorWidget
             ],

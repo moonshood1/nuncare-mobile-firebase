@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Doctor {
   String? id;
   String firebaseId;
@@ -10,12 +12,14 @@ class Doctor {
   int years;
   String img;
   String phone;
+  String region;
   String city;
   String address;
   double lng;
   double lat;
   String email;
   String orderNumber;
+  String promotion;
   String deviceId;
   bool isActive;
 
@@ -36,12 +40,14 @@ class Doctor {
     required this.years,
     required this.img,
     required this.phone,
+    required this.region,
     required this.city,
     required this.address,
     required this.lat,
     required this.lng,
     required this.email,
     required this.orderNumber,
+    required this.promotion,
     required this.isActive,
     required this.deviceId,
   });
@@ -59,12 +65,14 @@ class Doctor {
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
       phone: json['phone'],
+      region: json['region'],
       city: json['city'],
       address: json['address'],
       lat: (json['lat'] ?? 0).toDouble(),
       lng: (json['lng'] ?? 0).toDouble(),
       email: json['email'],
       orderNumber: json['orderNumber'],
+      promotion: json['promotion'],
       isActive: json['isActive'],
       deviceId: json['deviceId'],
     );
@@ -81,12 +89,14 @@ class Doctor {
       'years': years,
       'img': img,
       'phone': phone,
+      'region': region,
       'city': city,
       'address': address,
       'lat': lat,
       'lng': lng,
       'email': email,
       'orderNumber': orderNumber,
+      'promotion': promotion,
       'isActive': isActive,
     };
   }
@@ -104,6 +114,7 @@ class Doctor {
       years: 0,
       img: '',
       phone: '',
+      region: '',
       city: '',
       address: '',
       lat: 0,
@@ -112,6 +123,7 @@ class Doctor {
       orderNumber: '',
       isActive: true,
       deviceId: '',
+      promotion: '',
     );
   }
 }

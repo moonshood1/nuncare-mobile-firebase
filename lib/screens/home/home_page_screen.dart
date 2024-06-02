@@ -4,6 +4,7 @@ import 'package:nuncare_mobile_firebase/components/my_ad_card.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_medecine_card.dart';
+import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/models/ad_model.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/medecine_model.dart';
@@ -26,6 +27,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
   List<Ad> ads = [];
   List<Medecine> medecines = [];
   List<Article> articles = [];
+  var _isLoading = false;
+  var _adsLoading = false;
+  var _medsLoading = false;
 
   @override
   void initState() {
@@ -37,10 +41,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   void getAdsForStore() async {
     try {
+      setState(() {
+        _adsLoading = true;
+      });
+
       List<Ad> response = await _resourceService.getAds();
 
       setState(() {
         ads = response;
+        _adsLoading = false;
       });
     } catch (error) {
       print(error);
@@ -49,10 +58,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   void getMedecinesFromStore() async {
     try {
+      setState(() {
+        _medsLoading = true;
+      });
       List<Medecine> response = await _resourceService.getMedecines();
 
       setState(() {
         medecines = response;
+        _medsLoading = false;
       });
     } catch (error) {
       print(error);
@@ -61,10 +74,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   void getArticlesFromStore() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       List<Article> response = await _resourceService.getArticles();
 
       setState(() {
         articles = response;
+        _isLoading = false;
       });
     } catch (error) {
       print(error);
@@ -141,22 +158,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               const SizedBox(
                 height: 30,
               ),
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 130.0,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 5),
-                ),
-                items: ads.map(
-                  (i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return AdCard(ad: i);
-                      },
-                    );
-                  },
-                ).toList(),
-              ),
+              _buildAdCarouselSlider(),
               const SizedBox(
                 height: 30,
               ),
@@ -181,7 +183,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   }
 
   Widget _buildMedecineList(List<Medecine> medecines) {
-    if (medecines.isEmpty) {
+    if (_medsLoading == false && medecines.isEmpty) {
       return const Align(
         alignment: Alignment.center,
         child: Text(
@@ -190,6 +192,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
             fontSize: 13,
             fontWeight: FontWeight.w200,
           ),
+        ),
+      );
+    } else if (_medsLoading == true && medecines.isEmpty) {
+      return const SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+          spacing: 15,
+          children: <Widget>[
+            MyMedecineCardSkeleton(),
+            MyMedecineCardSkeleton(),
+            MyMedecineCardSkeleton(),
+          ],
         ),
       );
     } else {
@@ -210,7 +224,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   }
 
   Widget _buildArticleList(List<Article> articles) {
-    if (articles.isEmpty) {
+    if (_isLoading == false && articles.isEmpty) {
       return const Align(
         alignment: Alignment.center,
         child: Text(
@@ -220,6 +234,19 @@ class _HomePageScreenState extends State<HomePageScreen> {
             fontWeight: FontWeight.w200,
           ),
         ),
+      );
+    } else if (_isLoading == true && articles.isEmpty) {
+      return const Column(
+        children: [
+          MyArticleSkeleton(),
+          SizedBox(
+            height: 40,
+          ),
+          MyArticleSkeleton(
+            height: 100,
+            width: double.infinity,
+          ),
+        ],
       );
     } else {
       return SingleChildScrollView(
@@ -231,6 +258,44 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
           ],
         ),
+      );
+    }
+  }
+
+  Widget _buildAdCarouselSlider() {
+    if (_adsLoading == true && ads.isEmpty) {
+      return const SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            MyAdSkeleton(),
+            SizedBox(
+              width: 10,
+            ),
+            MyAdSkeleton(),
+            SizedBox(
+              width: 10,
+            ),
+            MyAdSkeleton(),
+          ],
+        ),
+      );
+    } else {
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: 130.0,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 5),
+        ),
+        items: ads.map(
+          (i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return AdCard(ad: i);
+              },
+            );
+          },
+        ).toList(),
       );
     }
   }

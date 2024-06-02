@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_selectfield.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
+import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
@@ -27,6 +29,10 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _orderNumberController = TextEditingController();
+  final TextEditingController _promotionController = TextEditingController();
+  // String? _selectedSpeciality;
+  // String? _selectedRegion;
+
   var _isLoading = false;
 
   final UserService _userService = UserService();
@@ -42,6 +48,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _phoneController.dispose();
     _cityController.dispose();
     _orderNumberController.dispose();
+    _promotionController.dispose();
     super.dispose();
   }
 
@@ -56,6 +63,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _phoneController.text = widget.doctor.phone;
     _cityController.text = widget.doctor.city;
     _orderNumberController.text = widget.doctor.orderNumber;
+    _promotionController.text = widget.doctor.promotion;
     super.initState();
   }
 
@@ -64,9 +72,6 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
       setState(() {
         _isLoading = true;
       });
-
-      print("CHAMP A MODIFIER : $field");
-      print("VALEUR ENVOYEE : $value");
 
       BasicResponse response =
           await _userService.updateUserInformations(field, value);
@@ -224,7 +229,8 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                       controller: _bioController,
                       obscureText: false,
                       labelText: "Bio",
-                      validator: (value) => validateLongText(value, 'La bio'),
+                      validator: (value) =>
+                          validateLongText(value, 'La bio', 10),
                       isHidden: false,
                       autoCorrect: false,
                       keyboardType: TextInputType.text,
@@ -376,7 +382,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                       obscureText: false,
                       labelText: "Votre numéro d'ordre",
                       validator: (value) =>
-                          validateName(value, "Le numéro d'ordre"),
+                          validateNumber(value, "Le numéro d'ordre"),
                       isHidden: false,
                       autoCorrect: false,
                       keyboardType: TextInputType.number,
@@ -390,6 +396,40 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                         context,
                         'orderNumber',
                         _orderNumberController.text.trim(),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MyTextField(
+                      controller: _promotionController,
+                      obscureText: false,
+                      labelText: "Votre numéro promotion",
+                      validator: (value) =>
+                          validateNumber(value, "La promotion"),
+                      isHidden: false,
+                      autoCorrect: false,
+                      keyboardType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      icon: Icons.school,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      editProfile(
+                        context,
+                        'promotion',
+                        _promotionController.text.trim(),
                       );
                     },
                     icon: Icon(
@@ -446,16 +486,16 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Ici , pointez sur la map votre position et vos données seront actualisées",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // const Text(
+            //   "Ici , pointez sur la map votre position et vos données seront actualisées",
+            //   style: TextStyle(
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.w300,
+            //   ),
+            // ),
           ],
         ),
       ),

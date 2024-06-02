@@ -28,10 +28,11 @@ class MyArticleRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 article.img,
                 height: 100,
+                width: 170,
               ),
             ),
             const SizedBox(

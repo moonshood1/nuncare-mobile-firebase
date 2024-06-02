@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 
-class ArticlePageScreen extends StatelessWidget {
+class ArticlePageScreen extends StatefulWidget {
   const ArticlePageScreen({super.key, required this.article});
 
   final Article article;
 
   @override
+  State<ArticlePageScreen> createState() => _ArticlePageScreenState();
+}
+
+class _ArticlePageScreenState extends State<ArticlePageScreen> {
+  void likeOrUnlikeArticle() async {}
+  @override
   Widget build(BuildContext context) {
-    DateTime inputDate = DateTime.parse(article.createdAt);
+    DateTime inputDate = DateTime.parse(widget.article.createdAt);
     String formattedDate = DateFormat('dd-MM-yyyy').format(inputDate);
 
     return Scaffold(
@@ -31,21 +37,12 @@ class ArticlePageScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                article.img,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
               Text(
-                article.title,
+                widget.article.title,
                 style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(
-                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,7 +58,7 @@ class ArticlePageScreen extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          article.authorName,
+                          widget.article.authorName,
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w300,
@@ -96,11 +93,64 @@ class ArticlePageScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.red.shade100,
+                            size: 32,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          widget.article.likes!.length.toString(),
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.share,
+                            size: 32,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text(
+                          "Partager l'article",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
               const SizedBox(
                 height: 15,
               ),
+              Image.network(
+                widget.article.img,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Text(
-                article.description,
+                widget.article.description,
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 17,
@@ -110,7 +160,7 @@ class ArticlePageScreen extends StatelessWidget {
                 height: 15,
               ),
               Text(
-                article.content,
+                widget.article.content,
                 style: const TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 14,
