@@ -289,7 +289,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         // ),
         MyInfoBox(
           text: currentUser.region,
-          sectionName: 'Region',
+          sectionName: 'Région',
         ),
         const SizedBox(
           height: 40,

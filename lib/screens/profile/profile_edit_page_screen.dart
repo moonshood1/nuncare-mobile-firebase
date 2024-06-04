@@ -476,16 +476,16 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              'Modification des informations de localisation',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            // const SizedBox(
+            //   height: 30,
+            // ),
+            // const Text(
+            //   'Modification des informations de localisation',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     fontWeight: FontWeight.w400,
+            //   ),
+            // ),
             // const SizedBox(
             //   height: 10,
             // ),
