@@ -76,23 +76,23 @@ class MyArticleRow extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.favorite,
-                            color: Colors.red.shade100,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            article.likes!.length.toString(),
-                            style: const TextStyle(
-                              fontSize: 11,
-                            ),
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Icon(
+                      //       Icons.favorite,
+                      //       color: Colors.red.shade100,
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 5,
+                      //     ),
+                      //     Text(
+                      //       article.likes!.length.toString(),
+                      //       style: const TextStyle(
+                      //         fontSize: 11,
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       Text(
                         formattedDate,
                         style: const TextStyle(

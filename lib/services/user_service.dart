@@ -308,6 +308,44 @@ class UserService {
     }
   }
 
+  Future<BasicResponse> updateBulkInformations(
+    Map<String, String> userData,
+  ) async {
+    try {
+      final url = Uri.parse("$usersUri/update-informations");
+
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(userData),
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return BasicResponse(
+          success: responseData['success'],
+          message: responseData['message'],
+        );
+      } else {
+        String errorMessage = responseData['message'];
+        throw errorMessage;
+      }
+    } catch (e) {
+      print('Erreur modification profil: $e');
+      rethrow;
+    }
+  }
+
   Future<void> interractWithArticle(String articleId) async {
     try {
       final url = Uri.parse("$usersUri/article-interract");

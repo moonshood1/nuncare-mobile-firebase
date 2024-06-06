@@ -24,14 +24,12 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _hospitalController = TextEditingController();
-  final TextEditingController _specialityController = TextEditingController();
   final TextEditingController _yearsController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
   final TextEditingController _orderNumberController = TextEditingController();
   final TextEditingController _promotionController = TextEditingController();
-  // String? _selectedSpeciality;
-  // String? _selectedRegion;
+  String? _selectedSpeciality;
+  String? _selectedRegion;
 
   var _isLoading = false;
 
@@ -43,10 +41,8 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _lastNameController.dispose();
     _bioController.dispose();
     _hospitalController.dispose();
-    _specialityController.dispose();
     _yearsController.dispose();
     _phoneController.dispose();
-    _cityController.dispose();
     _orderNumberController.dispose();
     _promotionController.dispose();
     super.dispose();
@@ -57,13 +53,15 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _firstNameController.text = widget.doctor.firstName;
     _lastNameController.text = widget.doctor.lastName;
     _bioController.text = widget.doctor.bio;
-    _hospitalController.text = widget.doctor.hospital;
-    _specialityController.text = widget.doctor.speciality;
-    _yearsController.text = widget.doctor.years.toString();
     _phoneController.text = widget.doctor.phone;
-    _cityController.text = widget.doctor.city;
+    _selectedRegion = widget.doctor.region;
+
+    _selectedSpeciality = widget.doctor.speciality;
+    _hospitalController.text = widget.doctor.hospital;
     _orderNumberController.text = widget.doctor.orderNumber;
+    _yearsController.text = widget.doctor.years.toString();
     _promotionController.text = widget.doctor.promotion;
+
     super.initState();
   }
 
@@ -112,6 +110,62 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     }
   }
 
+  void editProfileBulk(BuildContext context) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Map<String, String> userData = {
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'phone': _phoneController.text.trim(),
+        'hospital': _hospitalController.text.trim(),
+        'orderNumber': _orderNumberController.text.trim(),
+        'promotion': _promotionController.text.trim(),
+        'years': _yearsController.text.trim(),
+        'region': _selectedRegion!.trim(),
+        'speciality': _selectedSpeciality!.trim(),
+      };
+      BasicResponse response =
+          await _userService.updateBulkInformations(userData);
+
+      if (!context.mounted) {
+        return;
+      }
+
+      if (response.success) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        Navigator.of(context).pop(true);
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green.shade200,
+          content: Text(response.message),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+
+      return;
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade500,
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,148 +199,68 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
               height: 10,
             ),
             const Text(
-              "Pour la modification des champs , changez l'information souhaitée et appuyez sur l'icone de changement ",
+              "Pour la modification des champs , changez l'information souhaitée et enregistrez ",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w300,
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _firstNameController,
-                      obscureText: false,
-                      labelText: "Prénom",
-                      validator: (value) => validateName(value, 'Le prénom'),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.person,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'firstName',
-                        _firstNameController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
+            MyTextField(
+              controller: _firstNameController,
+              obscureText: false,
+              labelText: "Prénom",
+              validator: (value) => validateName(value, 'Le prénom'),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              icon: Icons.person,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _lastNameController,
-                      obscureText: false,
-                      labelText: "Nom",
-                      validator: (value) => validateName(value, 'Le nom'),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.person,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'lastName',
-                        _lastNameController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
+            const SizedBox(
+              height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _bioController,
-                      obscureText: false,
-                      labelText: "Bio",
-                      validator: (value) =>
-                          validateLongText(value, 'La bio', 10),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.folder_copy,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'bio',
-                        _bioController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
+            MyTextField(
+              controller: _lastNameController,
+              obscureText: false,
+              labelText: "Nom",
+              validator: (value) => validateName(value, 'Le nom'),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              icon: Icons.person,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _phoneController,
-                      obscureText: false,
-                      labelText: "Le numéro de téléphone",
-                      validator: (value) =>
-                          validatePhone(value, "Le numéro de téléphone"),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.medical_services,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'phone',
-                        _phoneController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _bioController,
+              obscureText: false,
+              labelText: "Bio",
+              validator: (value) => validateLongText(value, 'La bio', 10),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              icon: Icons.folder_copy,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _phoneController,
+              obscureText: false,
+              labelText: "Le numéro de téléphone",
+              validator: (value) =>
+                  validatePhone(value, "Le numéro de téléphone"),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              icon: Icons.medical_services,
             ),
             const SizedBox(
               height: 30,
@@ -308,194 +282,141 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
                 fontWeight: FontWeight.w300,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _specialityController,
-                      obscureText: false,
-                      labelText: "Votre spécialité",
-                      validator: (value) =>
-                          validateName(value, "La spécialité"),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.medical_services,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(context, 'speciality',
-                          _specialityController.text.trim());
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
+            const SizedBox(
+              height: 30,
+            ),
+            MySelectField(
+              label: 'Votre spécialité',
+              items: defaultSpecialities,
+              icon: Icons.medical_services,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedSpeciality = newValue;
+                });
+              },
+              selectedValue: _selectedSpeciality,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _hospitalController,
+              obscureText: false,
+              labelText: "Votre hopital d'exercice",
+              validator: (value) => validateName(value, "L'hopital"),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.words,
+              icon: Icons.medical_information,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _orderNumberController,
+              obscureText: false,
+              labelText: "Votre numéro d'ordre",
+              validator: (value) => validateNumber(value, "Le numéro d'ordre"),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.number,
+              textCapitalization: TextCapitalization.none,
+              icon: Icons.medical_information,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _promotionController,
+              obscureText: false,
+              labelText: "Votre numéro promotion",
+              validator: (value) => validateNumber(value, "La promotion"),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.number,
+              textCapitalization: TextCapitalization.none,
+              icon: Icons.school,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MyTextField(
+              controller: _yearsController,
+              obscureText: false,
+              labelText: "Année d'expérience",
+              validator: (value) => validateNumber(
+                value,
+                "Le nombre d'année d'expérience",
+              ),
+              isHidden: false,
+              autoCorrect: false,
+              keyboardType: TextInputType.number,
+              textCapitalization: TextCapitalization.none,
+              icon: Icons.calendar_month,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Modification des informations de localisation',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _hospitalController,
-                      obscureText: false,
-                      labelText: "Votre hopital d'exercice",
-                      validator: (value) => validateName(value, "L'hopital"),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      icon: Icons.medical_information,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'hospital',
-                        _hospitalController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              "Ici , choisissez votre région d'exercice",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _orderNumberController,
-                      obscureText: false,
-                      labelText: "Votre numéro d'ordre",
-                      validator: (value) =>
-                          validateNumber(value, "Le numéro d'ordre"),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.number,
-                      textCapitalization: TextCapitalization.none,
-                      icon: Icons.medical_information,
-                    ),
+            const SizedBox(
+              height: 30,
+            ),
+            MySelectField(
+              label: 'Ma région',
+              items: defaultRegions,
+              icon: Icons.map,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedRegion = newValue;
+                });
+              },
+              selectedValue: _selectedRegion,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : () => editProfileBulk(context),
+                style: ElevatedButton.styleFrom(
+                  elevation: 2,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 10,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'orderNumber',
-                        _orderNumberController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Enregistrer les modifications",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _promotionController,
-                      obscureText: false,
-                      labelText: "Votre numéro promotion",
-                      validator: (value) =>
-                          validateNumber(value, "La promotion"),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.number,
-                      textCapitalization: TextCapitalization.none,
-                      icon: Icons.school,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'promotion',
-                        _promotionController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyTextField(
-                      controller: _yearsController,
-                      obscureText: false,
-                      labelText: "Année d'expérience",
-                      validator: (value) => validateNumber(
-                        value,
-                        "Le nombre d'année d'expérience",
-                      ),
-                      isHidden: false,
-                      autoCorrect: false,
-                      keyboardType: TextInputType.number,
-                      textCapitalization: TextCapitalization.none,
-                      icon: Icons.calendar_month,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      editProfile(
-                        context,
-                        'years',
-                        _yearsController.text.trim(),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            // const SizedBox(
-            //   height: 30,
-            // ),
-            // const Text(
-            //   'Modification des informations de localisation',
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     fontWeight: FontWeight.w400,
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // const Text(
-            //   "Ici , pointez sur la map votre position et vos données seront actualisées",
-            //   style: TextStyle(
-            //     fontSize: 14,
-            //     fontWeight: FontWeight.w300,
-            //   ),
-            // ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+// CONSTRSUCTION DES BULES D'UTILISATEURS POUR ENVOI DE MESSAGE
 // Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
 //   if (userData["email"] != _authService.getCurrentUser()!.email) {
 //     return MyUserTile(
@@ -17,6 +18,9 @@
 //     return Container();
 //   }
 // }
+
+
+// RECUPERATION DE LA LISTE DES UTILISATEURS DEPUIS FIREBASE
 
 // Widget _buildChatList() {
 //   return StreamBuilder(
@@ -53,6 +57,8 @@
 
 
 
+// RECUPERATION INFORMATIONS PAGE PROFIL DEPUIS FIREBASE
+
         // StreamBuilder<DocumentSnapshot>(
         //   stream: _userService.getUserInformations(currentUser.uid),
         //   builder: (context, snapshot) {
@@ -60,9 +66,6 @@
         //       final userData = snapshot.data!.data() as Map<String, dynamic>;
 
         //       return 
-              
-              
-
             // } else if (snapshot.hasError) {
             //   return Center(
             //     child: Text(snapshot.error.toString()),
@@ -70,4 +73,30 @@
             // } else {
             //   return const MyLoadingCirle();
             // }
+
+
+// MODIFICATION DE PROFILE CHAMP PAR CHAMP
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 10),
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child:
+            //       ),
+            //       IconButton(
+            //         onPressed: () {
+            //           editProfile(
+            //             context,
+            //             'firstName',
+            //             _firstNameController.text.trim(),
+            //           );
+            //         },
+            //         icon: Icon(
+            //           Icons.edit,
+            //           color: Theme.of(context).colorScheme.primary,
+            //         ),
+            //       )
+            //     ],
+            //   ),
+            // ),
 

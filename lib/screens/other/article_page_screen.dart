@@ -93,53 +93,53 @@ class _ArticlePageScreenState extends State<ArticlePageScreen> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.favorite,
-                            color: Colors.red.shade100,
-                            size: 32,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          widget.article.likes!.length.toString(),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.share,
-                            size: 32,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Text(
-                          "Partager l'article",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Row(
+              //         children: [
+              //           IconButton(
+              //             onPressed: () {},
+              //             icon: Icon(
+              //               Icons.favorite,
+              //               color: Colors.red.shade100,
+              //               size: 32,
+              //             ),
+              //           ),
+              //           const SizedBox(
+              //             width: 5,
+              //           ),
+              //           Text(
+              //             widget.article.likes!.length.toString(),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: Row(
+              //         children: [
+              //           IconButton(
+              //             onPressed: () {},
+              //             icon: const Icon(
+              //               Icons.share,
+              //               size: 32,
+              //             ),
+              //           ),
+              //           const SizedBox(
+              //             width: 5,
+              //           ),
+              //           const Text(
+              //             "Partager l'article",
+              //             style: TextStyle(
+              //               fontWeight: FontWeight.w300,
+              //               fontSize: 12,
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //     )
+              //   ],
+              // ),
               const SizedBox(
                 height: 15,
               ),
