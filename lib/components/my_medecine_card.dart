@@ -9,8 +9,9 @@ class MyMedecineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      width: 150,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -23,47 +24,52 @@ class MyMedecineCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(children: <Widget>[
-        Image.network(
-          medecine.img,
-          height: 70,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          medecine.name,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            medecine.name,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              medecine.dci,
-              style: const TextStyle(
-                fontWeight: FontWeight.w200,
-                fontSize: 10,
-              ),
+          const SizedBox(
+            height: 3,
+          ),
+          Text(
+            medecine.dci,
+            style: const TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 10,
             ),
-            Text(
-              medecine.category,
-              style: const TextStyle(
-                fontWeight: FontWeight.w200,
-                fontSize: 10,
-              ),
+          ),
+          const SizedBox(
+            height: 2,
+          ),
+          Text(
+            medecine.group,
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
+              fontWeight: FontWeight.w200,
+              fontSize: 10,
             ),
-          ],
-        )
-      ]),
+          ),
+          const SizedBox(
+            height: 2,
+          ),
+          Text(
+            medecine.category,
+            style: const TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 7,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

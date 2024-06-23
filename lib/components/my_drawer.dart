@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/other/pharmacies_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -40,14 +41,23 @@ class MyDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
               ),
             ),
-            // ListTile(
-            //   onTap: () {},
-            //   leading: const Icon(Icons.local_hospital),
-            //   title: const Text(
-            //     "Consultez les pharmacies",
-            //     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-            //   ),
-            // ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const PharmaciesPageScreen(),
+                  ),
+                );
+              },
+              leading: const Icon(
+                Icons.local_hospital,
+              ),
+              title: const Text(
+                "Consultez les pharmacies",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+              ),
+            ),
             ListTile(
               onTap: () {
                 Navigator.push(

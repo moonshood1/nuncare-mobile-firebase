@@ -116,7 +116,7 @@ class ResourceService {
     }
   }
 
-  Future<List<Article>> getArticles({int size = 2}) async {
+  Future<List<Article>> getArticles({int size = 3}) async {
     try {
       final url = Uri.parse("$resourcesUri/articles?size=$size");
 

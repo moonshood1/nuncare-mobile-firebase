@@ -142,11 +142,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Le journal',
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 10),
+              // const Text(
+              //   'Le journal',
+              //   style: TextStyle(
+              //     fontSize: 22,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // const SizedBox(height: 10),
               _buildArticleList(articles),
               const SizedBox(
                 height: 20,
@@ -164,7 +167,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
               const Text(
                 'Les médicaments assurés',
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(
+                  fontSize: 1,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 10),
               _buildMedecineList(medecines),
@@ -208,11 +214,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
       );
     } else {
       return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Wrap(
-          spacing: 15,
+        scrollDirection: Axis.vertical,
+        child: Column(
           children: <Widget>[
-            ...medecines.sublist(0, 3).map(
+            ...medecines.sublist(0, 4).map(
                   (medecine) => MyMedecineCard(
                     medecine: medecine,
                   ),
@@ -241,6 +246,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
           MyArticleSkeleton(),
           SizedBox(
             height: 40,
+          ),
+          MyArticleSkeleton(
+            height: 100,
+            width: double.infinity,
           ),
           MyArticleSkeleton(
             height: 100,

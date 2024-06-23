@@ -24,86 +24,89 @@ class MyArticleRow extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                article.img,
-                height: 100,
-                width: 170,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.person,
-                        size: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Text(
-                          article.authorName,
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    article.content,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Row(
-                      //   children: [
-                      //     Icon(
-                      //       Icons.favorite,
-                      //       color: Colors.red.shade100,
-                      //     ),
-                      //     const SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     Text(
-                      //       article.likes!.length.toString(),
-                      //       style: const TextStyle(
-                      //         fontSize: 11,
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
                       Text(
-                        formattedDate,
+                        article.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        article.content,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    article.img,
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.person,
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      article.authorName,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Ecrit le : $formattedDate",
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             )
           ],
         ),

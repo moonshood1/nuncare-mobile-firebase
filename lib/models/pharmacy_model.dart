@@ -3,14 +3,14 @@ class Pharmacy {
     required this.id,
     required this.name,
     required this.city,
-    required this.district,
+    required this.region,
     required this.lng,
     required this.lat,
     required this.phone,
     required this.img,
   });
 
-  String id, img, name, city, district, phone;
+  String id, img, name, city, region, phone;
   double lng, lat;
 
   factory Pharmacy.fromJson(Map<String, dynamic> json) {
@@ -21,7 +21,7 @@ class Pharmacy {
       lng: (json['lng'] ?? 0).toDouble(),
       img: json['img'] ?? '',
       phone: json['phone'],
-      district: json["district"],
+      region: json["region"],
       city: json['city'],
     );
   }
@@ -33,7 +33,7 @@ class Pharmacy {
       'lat': lat,
       'lng': lng,
       'phone': phone,
-      'district': district,
+      'region': region,
       'city': city,
     };
   }

@@ -53,32 +53,40 @@ class _LocationScreenPageState extends State<LocationScreenPage> {
       _isLocationLoading = true;
     });
 
-    locationData = await location.getLocation();
+    try {
+      locationData = await location.getLocation();
 
-    final lat = locationData.latitude;
-    final lng = locationData.longitude;
+      final lat = locationData.latitude;
+      final lng = locationData.longitude;
 
-    final url = Uri.parse(
-        "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&location_type=ROOFTOP&result_type=street_address&key=AIzaSyARiGmPVVIIwOnAaQAPPyzTTlNaM3TTsLg");
+      final url = Uri.parse(
+          "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&location_type=ROOFTOP&result_type=street_address&key=AIzaSyARiGmPVVIIwOnAaQAPPyzTTlNaM3TTsLg");
 
-    final response = await http.get(url);
+      final response = await http.get(url);
 
-    final resData = json.decode(response.body);
+      final resData = json.decode(response.body);
 
-    setState(() {
-      _pickedAddress = resData['plus_code']['compound_code'];
-      _lng = lng;
-      _lat = lat;
-    });
-
-    setState(() {
-      _isLocationLoading = false;
-    });
+      setState(() {
+        _pickedAddress = resData['plus_code']['compound_code'];
+        _lng = lng;
+        _lat = lat;
+      });
+    } catch (e) {
+      setState(() {
+        _isLocationLoading = false;
+      });
+      print(e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget previewPosition = const Text("Aucune position choisie");
+    Widget previewPosition = const Text(
+      "Aucune position choisie",
+      style: TextStyle(
+        fontWeight: FontWeight.w300,
+      ),
+    );
 
     if (_isLocationLoading) {
       previewPosition = const MyLoadingCirle();
