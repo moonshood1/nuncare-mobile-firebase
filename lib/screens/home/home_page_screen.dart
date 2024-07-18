@@ -2,13 +2,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_ad_card.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
+import 'package:nuncare_mobile_firebase/components/my_doctor_bubble.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_medecine_card.dart';
 import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/models/ad_model.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/medecine_model.dart';
+import 'package:nuncare_mobile_firebase/models/user_model.dart';
+import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart';
 import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/other/doctors_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/news_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/notifications_page_screen.dart';
@@ -27,15 +31,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
   List<Ad> ads = [];
   List<Medecine> medecines = [];
   List<Article> articles = [];
+  List<Doctor> doctors = [];
   var _isLoading = false;
   var _adsLoading = false;
   var _medsLoading = false;
+  var _docsLoading = false;
 
   @override
   void initState() {
     getAdsForStore();
     getMedecinesFromStore();
     getArticlesFromStore();
+    getlastRegisteredDoctors();
     super.initState();
   }
 
@@ -82,6 +89,22 @@ class _HomePageScreenState extends State<HomePageScreen> {
       setState(() {
         articles = response;
         _isLoading = false;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getlastRegisteredDoctors() async {
+    try {
+      setState(() {
+        _docsLoading = true;
+      });
+      List<Doctor> response = await _resourceService.getLastRegisteredDoctors();
+
+      setState(() {
+        doctors = response;
+        _docsLoading = false;
       });
     } catch (error) {
       print(error);
@@ -142,14 +165,25 @@ class _HomePageScreenState extends State<HomePageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // const Text(
-              //   'Le journal',
-              //   style: TextStyle(
-              //     fontSize: 22,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/article.png',
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    'Journal',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
               _buildArticleList(articles),
               const SizedBox(
                 height: 20,
@@ -165,12 +199,23 @@ class _HomePageScreenState extends State<HomePageScreen> {
               const SizedBox(
                 height: 30,
               ),
-              const Text(
-                'Les médicaments assurés',
-                style: TextStyle(
-                  fontSize: 1,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/medi.png',
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    'Médicaments assurés',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               _buildMedecineList(medecines),
@@ -180,6 +225,32 @@ class _HomePageScreenState extends State<HomePageScreen> {
               _buildRedirectionButton(
                 "Consulter la liste complète",
                 const MedecinesPageScreen(),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/doctors.png',
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    'Derniers medecins inscrits',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              _buildLastRegisteredDoctors(doctors),
+              const SizedBox(
+                height: 30,
               ),
             ],
           ),
@@ -331,5 +402,66 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildLastRegisteredDoctors(List<Doctor> doctors) {
+    if (_docsLoading == false && doctors.isEmpty) {
+      return const Align(
+        alignment: Alignment.center,
+        child: Text(
+          "Aucun docteurs inscrits récemment",
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
+      );
+    } else if (_docsLoading == true && doctors.isEmpty) {
+      return const SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyDoctorBubbleSkeleton(),
+            SizedBox(
+              width: 30,
+            ),
+            MyDoctorBubbleSkeleton(),
+            SizedBox(
+              width: 30,
+            ),
+            MyDoctorBubbleSkeleton(),
+            SizedBox(
+              width: 30,
+            ),
+            MyDoctorBubbleSkeleton(),
+          ],
+        ),
+      );
+    } else {
+      return Column(children: [
+        const Text(
+          'Retrouvez les 4 derniers docteurs inscrits sur la plateforme',
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 13,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final doctor in doctors)
+                MyDoctorBubble(
+                  doctor: doctor,
+                ),
+            ],
+          ),
+        )
+      ]);
+    }
   }
 }

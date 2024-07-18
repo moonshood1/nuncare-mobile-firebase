@@ -209,7 +209,6 @@ class _ArticleEditPageScreenState extends State<ArticleEditPageScreen> {
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.none,
                 icon: Icons.title,
-                maxLines: 2,
               ),
               const SizedBox(
                 height: 20,
@@ -225,7 +224,6 @@ class _ArticleEditPageScreenState extends State<ArticleEditPageScreen> {
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.none,
                 icon: Icons.content_copy,
-                maxLines: 3,
               ),
               const SizedBox(
                 height: 30,

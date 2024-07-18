@@ -76,6 +76,21 @@ class _LoginScreenState extends State<LoginScreen> {
         MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Connexion",
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pop(),
+          child: const Icon(
+            Icons.arrow_back_ios,
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: deviceWidth(context) * 0.05),

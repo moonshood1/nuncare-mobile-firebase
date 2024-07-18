@@ -165,6 +165,7 @@ class UserService {
     List<String> ids = [currentUserId, receiverId];
     ids.sort();
     String chatRoomId = ids.join('_');
+    print('message envoyé a la chatRoom ${chatRoomId} -- $newMessage');
 
     await registerChatRoom(receiverId, chatRoomId);
 

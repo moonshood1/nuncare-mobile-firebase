@@ -62,13 +62,21 @@ class _RootPageScreenState extends State<RootPageScreen> {
             label: "Annuaire",
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.chat_bubble),
-            label: "Messagerie",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: const Icon(Icons.chat_bubble),
+          //   // icon: Image.asset(
+          //   //   'assets/icons/discuter.png',
+          //   //   width: 35,
+          //   // ),
+          //   label: "Messagerie",
+          //   backgroundColor: Theme.of(context).colorScheme.primary,
+          // ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
+            // icon: Image.asset(
+            //   'assets/icons/utilisateur.png',
+            //   width: 35,
+            // ),
             label: "Profil",
             backgroundColor: Theme.of(context).colorScheme.primary,
           )

@@ -65,7 +65,7 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
             ),
             MySelectField(
               label: 'Choisissez une région',
-              items: defaultRegions,
+              items: defaultRegions.keys.toList(),
               icon: Icons.map,
               onChanged: (String? newValue) {
                 setState(() {

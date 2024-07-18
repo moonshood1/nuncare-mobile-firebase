@@ -35,12 +35,7 @@ class AuthService {
     }
   }
 
-  Future<BasicResponse> signUp(
-    String email,
-    password,
-    firstName,
-    lastName,
-  ) async {
+  Future<BasicResponse> signUp(Map<String, String> userData) async {
     try {
       final url = Uri.parse('$authUri/register');
 
@@ -49,14 +44,7 @@ class AuthService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: json.encode(
-          {
-            'email': email,
-            'firstName': firstName,
-            'lastName': lastName,
-            'password': password,
-          },
-        ),
+        body: json.encode(userData),
       );
 
       final Map<String, dynamic> responseData = json.decode(response.body);

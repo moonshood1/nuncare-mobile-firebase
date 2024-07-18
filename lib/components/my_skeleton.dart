@@ -164,3 +164,19 @@ class MyDoctorCardSkeleton extends StatelessWidget {
     );
   }
 }
+
+class MyDoctorBubbleSkeleton extends StatelessWidget {
+  const MyDoctorBubbleSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      width: 70,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.1),
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+}

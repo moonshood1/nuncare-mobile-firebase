@@ -380,7 +380,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
             ),
             MySelectField(
               label: 'Ma région',
-              items: defaultRegions,
+              items: defaultRegions.keys.toList(),
               icon: Icons.map,
               onChanged: (String? newValue) {
                 setState(() {

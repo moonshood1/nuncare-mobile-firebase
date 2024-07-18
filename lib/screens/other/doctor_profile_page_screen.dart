@@ -88,19 +88,19 @@ class DoctorProfilePageScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.send),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (ctx) => ChatPageScreen(
-              receiverName: "${doctor.firstName} ${doctor.lastName}",
-              receiverId: doctor.id!,
-              // receiverEmail: doctor.email,
-            ),
-          ),
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.send),
+      //   onPressed: () => Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (ctx) => ChatPageScreen(
+      //         receiverName: "${doctor.firstName} ${doctor.lastName}",
+      //         receiverId: doctor.id!,
+      //         // receiverEmail: doctor.email,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

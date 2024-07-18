@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nuncare_mobile_firebase/models/message_model.dart';
 import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 
 class MyChatTile extends StatelessWidget {
   const MyChatTile({super.key, required this.message});
@@ -10,6 +11,9 @@ class MyChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+    String currentUserId = _auth.getCurrentUser()!.uid;
+
     DateTime inputDate = DateTime.parse(message.messageTime!);
 
     String formattedDate = DateFormat('dd-MM-yyyy - HH:mm').format(inputDate);
@@ -48,7 +52,11 @@ class MyChatTile extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Text(message.receiverName),
+                Text(
+                  currentUserId == message.receiverId
+                      ? message.receiverName
+                      : message.senderEmail,
+                ),
               ],
             ),
             const SizedBox(

@@ -12,6 +12,7 @@ class Doctor {
   int years;
   String img;
   String phone;
+  String district;
   String region;
   String city;
   String address;
@@ -40,6 +41,7 @@ class Doctor {
     required this.years,
     required this.img,
     required this.phone,
+    required this.district,
     required this.region,
     required this.city,
     required this.address,
@@ -64,6 +66,7 @@ class Doctor {
       speciality: json['speciality'],
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
+      district: json['district'],
       phone: json['phone'],
       region: json['region'],
       city: json['city'],
@@ -114,6 +117,7 @@ class Doctor {
       years: 0,
       img: '',
       phone: '',
+      district: '',
       region: '',
       city: '',
       address: '',

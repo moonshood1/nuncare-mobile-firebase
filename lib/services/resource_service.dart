@@ -505,6 +505,43 @@ class ResourceService {
     }
   }
 
+  Future<List<Doctor>> getLastRegisteredDoctors() async {
+    try {
+      final url = Uri.parse("$resourcesUri/doctors-registered");
+
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        final List<dynamic> doctorsData = responseData['doctors'] ?? [];
+
+        final List<Doctor> doctors = doctorsData.map((data) {
+          return Doctor.fromJson(data);
+        }).toList();
+
+        return doctors;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw Exception(
+          'Erreur lors de la récupération des derniers inscrits : $error');
+    }
+  }
+
   Future<void> addArticle(Article article) async {
     try {
       Map<String, dynamic> articleData = article.toJson();
