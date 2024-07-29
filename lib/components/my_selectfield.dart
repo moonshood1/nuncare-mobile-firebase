@@ -28,13 +28,13 @@ class _MySelectFieldState extends State<MySelectField> {
 
   @override
   void initState() {
-    _items = widget.items;
-    _selectedItem = widget.selectedValue;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _items = widget.items;
+    _selectedItem = widget.selectedValue;
     return DropdownButtonFormField<String>(
       value: _selectedItem,
       decoration: InputDecoration(
@@ -78,6 +78,7 @@ class _MySelectFieldState extends State<MySelectField> {
           fontWeight: FontWeight.w300,
         ),
       ),
+      isExpanded: true,
       items: _items.map(
         (String item) {
           return DropdownMenuItem<String>(

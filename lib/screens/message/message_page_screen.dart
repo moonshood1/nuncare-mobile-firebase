@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nuncare_mobile_firebase/components/my_chat_tile.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
-import 'package:nuncare_mobile_firebase/models/message_model.dart';
-import 'package:nuncare_mobile_firebase/services/user_service.dart';
+import 'package:nuncare_mobile_firebase/components/my_user_tile.dart';
+import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
+import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 
 class MessagePageScreen extends StatefulWidget {
   const MessagePageScreen({super.key});
@@ -13,60 +14,16 @@ class MessagePageScreen extends StatefulWidget {
 }
 
 class _MessagePageScreenState extends State<MessagePageScreen> {
-  final UserService _userService = UserService();
-
-  List<Message> messages = [];
-  var _isLoading = false;
-
-  void getMessagesFromStore() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      List<Message> response = await _userService.getChats();
-
-      setState(() {
-        messages = response;
-        _isLoading = false;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  final ChatService _chatService = ChatService();
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
-    getMessagesFromStore();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget messagesContent = const Center(
-      child: Text(
-        "Aucune conversation pour l'instant",
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-      ),
-    );
-
-    if (_isLoading && messages.isEmpty) {
-      messagesContent = const Center(
-        child: MyLoadingCirle(),
-      );
-    }
-
-    if (messages.isNotEmpty) {
-      messagesContent = ListView.builder(
-        itemCount: messages.length,
-        itemBuilder: (BuildContext ctx, int index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MyChatTile(
-            message: messages[index],
-          ),
-        ),
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -76,10 +33,67 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
         ),
       ),
       drawer: MyDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: messagesContent,
-      ),
+      body: _buildUserList(),
     );
+  }
+
+  Widget _buildUserList() {
+    return StreamBuilder(
+      stream: _chatService.getUserStream(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Center(
+              child: Text(
+                "Erreur de récupération des utilisateurs",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: MyLoadingCirle(),
+          );
+        }
+
+        if (snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text(
+              "Aucune conversation pour l'instant",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+            ),
+          );
+        }
+
+        return ListView(
+          children: snapshot.data!
+              .map<Widget>((userData) => _buildUserListItem(userData, context))
+              .toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildUserListItem(
+      Map<String, dynamic> userData, BuildContext context) {
+    if (userData["email"] != _authService.getCurrentUser()!.email) {
+      return MyUserTile(
+        text: "${userData["email"]}",
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => ChatPageScreen(
+              receiverName: "${userData["email"]}",
+              receiverId: userData['uid'],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }

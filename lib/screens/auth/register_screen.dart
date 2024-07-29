@@ -5,6 +5,7 @@ import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/registration_pages/personnal_infos_page.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/registration_pages/professional_infos_page.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/registration_pages/security_infos_page.dart';
+import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,14 +17,15 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _auth = AuthService();
   late PageController _pageController;
+  ResourceService _resourceService = ResourceService();
   late List<Widget> registrationsPage;
+  List<String> _regionsForSelectedDistrict = [];
 
   var _isLoading = false;
 
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
   String _selectedGender = 'H';
 
   final TextEditingController _yearsController = TextEditingController();
@@ -38,6 +40,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _confirmPwController = TextEditingController();
   bool _policyTermsCheck = false;
   bool _dataTermsCheck = false;
+
+  void getRegionsForDistrict(String district) async {
+    try {
+      List<String> response =
+          await _resourceService.getRegionsForSpecificDistrict(district);
+
+      setState(() {
+        _regionsForSelectedDistrict = response;
+      });
+
+      print(_regionsForSelectedDistrict);
+    } catch (error) {
+      print(error);
+    }
+  }
 
   void _handleChangePolicy(bool? newValue) {
     setState(() {
@@ -57,6 +74,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
+  void _handleSelectSpeciality(String? value) {
+    _selectedSpeciality = value;
+  }
+
+  void _handleSelectDistrict(String? value) {
+    _selectedDistrict = value;
+    getRegionsForDistrict(value!);
+  }
+
+  void _handleSelectRegion(String? value) {
+    _selectedRegion = value;
+  }
+
   int _pageIndex = 0;
 
   @override
@@ -68,7 +98,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         firstnameController: _firstnameController,
         lastnameController: _lastnameController,
         phoneController: _phoneController,
-        bioController: _bioController,
         selectedGender: _selectedGender,
         onChangeGender: _handleSelectGender,
       ),
@@ -80,6 +109,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         selectedDistrict: _selectedDistrict,
         selectedRegion: _selectedRegion,
         selectedSpeciality: _selectedSpeciality,
+        regions: _regionsForSelectedDistrict,
+        onChangeDistrict: _handleSelectDistrict,
+        onChangeSpeciality: _handleSelectSpeciality,
+        onChangeRegion: _handleSelectRegion,
       ),
       SecurityPageInfos(
         controller: _pageController,
@@ -91,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isLoading: _isLoading,
         onChangeTerms: _handleChangeTerms,
         onChangePolicy: _handleChangePolicy,
-        onSubmit: () => _submit(context),
+        onSubmit: _submit,
       ),
     ];
     super.initState();
@@ -106,14 +139,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _firstnameController.dispose();
     _lastnameController.dispose();
     _phoneController.dispose();
-    _bioController.dispose();
     _yearsController.dispose();
     _promotionController.dispose();
     _orderNumberController.dispose();
     super.dispose();
   }
 
-  void _submit(BuildContext context) async {
+  void _submit() async {
     try {
       setState(() {
         _isLoading = true;
@@ -123,7 +155,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         "email": _emailController.text.trim(),
         "firstName": _firstnameController.text.trim(),
         "lastName": _lastnameController.text.trim(),
-        "bio": _bioController.text.trim(),
         "sex": _selectedGender,
         "speciality": _selectedSpeciality!,
         "years": _yearsController.text.trim(),
@@ -131,7 +162,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         "orderNumber": _orderNumberController.text.trim(),
         "promotion": _promotionController.text.trim(),
         "district": _selectedDistrict!,
-        "region": _selectedRegion!
+        // "region": _selectedRegion!,
+        'password': _pwController.text.trim()
       };
 
       BasicResponse response = await _auth.signUp(userData);

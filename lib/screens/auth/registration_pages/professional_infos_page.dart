@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_selectfield.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
+import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 import 'package:nuncare_mobile_firebase/validators/number_validator.dart';
 
 class ProfessionnalPageInfos extends StatefulWidget {
@@ -14,6 +15,10 @@ class ProfessionnalPageInfos extends StatefulWidget {
     this.selectedSpeciality,
     this.selectedDistrict,
     this.selectedRegion,
+    this.regions,
+    required this.onChangeDistrict,
+    required this.onChangeSpeciality,
+    required this.onChangeRegion,
   });
 
   final PageController controller;
@@ -23,6 +28,10 @@ class ProfessionnalPageInfos extends StatefulWidget {
   String? selectedSpeciality;
   String? selectedDistrict;
   String? selectedRegion;
+  List<String>? regions;
+  final void Function(String? value) onChangeDistrict,
+      onChangeSpeciality,
+      onChangeRegion;
 
   @override
   State<ProfessionnalPageInfos> createState() => _ProfessionnalPageInfosState();
@@ -30,7 +39,60 @@ class ProfessionnalPageInfos extends StatefulWidget {
 
 class _ProfessionnalPageInfosState extends State<ProfessionnalPageInfos>
     with AutomaticKeepAliveClientMixin {
-  List<String> _regionsForSelectedDistrict = [];
+  final ResourceService _resourceService = ResourceService();
+
+  List<String> _specialities = [];
+  List<String> _districts = [];
+  List<String> _regions = [];
+  bool _isDistrictSelected = false;
+
+  void getSpecialities() async {
+    try {
+      List<String> response = await _resourceService.getSpecialities();
+
+      setState(() {
+        _specialities = response;
+      });
+    } catch (error) {
+      print("specialite error");
+      print(error);
+    }
+  }
+
+  void getDistricts() async {
+    try {
+      List<String> response = await _resourceService.getDistricts();
+
+      setState(() {
+        _districts = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getRegionsForDistrict(String district) async {
+    try {
+      List<String> response =
+          await _resourceService.getRegionsForSelectedDistrict(district);
+
+      setState(() {
+        _isDistrictSelected = true;
+        _regions = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getSpecialities();
+      getDistricts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +107,13 @@ class _ProfessionnalPageInfosState extends State<ProfessionnalPageInfos>
             ),
             MySelectField(
               label: 'Spécialité',
-              items: defaultSpecialities,
+              items: _specialities,
               icon: Icons.medical_services,
               onChanged: (String? newValue) {
-                setState(() {
-                  widget.selectedSpeciality = newValue!;
-                });
+                widget.onChangeSpeciality(newValue!);
+                widget.selectedSpeciality = newValue;
+
+                setState(() {});
               },
               selectedValue: widget.selectedSpeciality,
             ),
@@ -59,39 +122,61 @@ class _ProfessionnalPageInfosState extends State<ProfessionnalPageInfos>
             ),
             MySelectField(
               label: 'District',
-              items: defaultDistricts.keys.toList(),
+              items: _districts,
               icon: Icons.map,
-              onChanged: (String? newValue) {
-                setState(
-                  () {
-                    widget.selectedRegion = null;
-                    widget.selectedDistrict = newValue!;
-                    _regionsForSelectedDistrict =
-                        newValue != null ? defaultDistricts[newValue]! : [];
-                  },
-                );
+              onChanged: (String? newValue) async {
+                widget.onChangeDistrict(newValue!);
+                widget.selectedDistrict = newValue;
+                widget.selectedRegion = null;
+                widget.onChangeRegion(null);
+
+                getRegionsForDistrict(newValue);
+
+                setState(() {});
               },
               selectedValue: widget.selectedDistrict,
             ),
-            if (widget.selectedDistrict != null)
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  MySelectField(
-                    label: 'Région',
-                    items: _regionsForSelectedDistrict,
-                    icon: Icons.location_city,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        widget.selectedRegion = newValue!;
-                      });
-                    },
-                    selectedValue: widget.selectedRegion,
-                  ),
-                ],
-              ),
+
+            // if (_isDistrictSelected)
+            //   Column(
+            //     children: [
+            //       const SizedBox(
+            //         height: 20,
+            //       ),
+            //       MySelectField(
+            //         label: 'Région',
+            //         items: _regions,
+            //         icon: Icons.location_city,
+            //         onChanged: (String? newValue) {
+            //           widget.onChangeRegion(newValue!);
+            //           widget.selectedRegion = newValue;
+
+            //           setState(() {});
+            //         },
+            //         selectedValue: widget.selectedRegion,
+            //       ),
+            //     ],
+            //   ),
+            // if (widget.selectedDistrict != null && _regions.isNotEmpty)
+            //   Column(
+            //     children: [
+            //       const SizedBox(
+            //         height: 20,
+            //       ),
+            //       MySelectField(
+            //         label: 'Région',
+            //         items: _regions,
+            //         icon: Icons.location_city,
+            //         onChanged: (String? newValue) {
+            //           widget.onChangeRegion(newValue!);
+            //           widget.selectedRegion = newValue;
+
+            //           setState(() {});
+            //         },
+            //         selectedValue: widget.selectedRegion,
+            //       ),
+            //     ],
+            //   ),
             const SizedBox(
               height: 20,
             ),
@@ -159,7 +244,7 @@ class _ProfessionnalPageInfosState extends State<ProfessionnalPageInfos>
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.grey,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
+                          horizontal: 10,
                           vertical: 10,
                         ),
                         shape: RoundedRectangleBorder(
@@ -194,7 +279,7 @@ class _ProfessionnalPageInfosState extends State<ProfessionnalPageInfos>
                         foregroundColor: Colors.white,
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
+                          horizontal: 10,
                           vertical: 10,
                         ),
                         shape: RoundedRectangleBorder(

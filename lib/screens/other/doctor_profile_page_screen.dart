@@ -96,7 +96,6 @@ class DoctorProfilePageScreen extends StatelessWidget {
       //       builder: (ctx) => ChatPageScreen(
       //         receiverName: "${doctor.firstName} ${doctor.lastName}",
       //         receiverId: doctor.id!,
-      //         // receiverEmail: doctor.email,
       //       ),
       //     ),
       //   ),

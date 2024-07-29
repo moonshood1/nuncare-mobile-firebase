@@ -9,6 +9,7 @@ class Doctor {
   String sex;
   String hospital;
   String speciality;
+  String? otherSpeciality;
   int years;
   String img;
   String phone;
@@ -24,11 +25,6 @@ class Doctor {
   String deviceId;
   bool isActive;
 
-  // city: ,
-  // address: ,
-  // lat
-  // lng
-
   Doctor({
     this.id,
     required this.firebaseId,
@@ -38,6 +34,7 @@ class Doctor {
     required this.sex,
     required this.hospital,
     required this.speciality,
+    this.otherSpeciality,
     required this.years,
     required this.img,
     required this.phone,
@@ -64,6 +61,7 @@ class Doctor {
       sex: json['sex'] ?? '',
       hospital: json['hospital'] ?? '',
       speciality: json['speciality'],
+      otherSpeciality: json['otherSpeciality'],
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
       district: json['district'],
@@ -89,6 +87,7 @@ class Doctor {
       'sex': sex,
       'hospital': hospital,
       'speciality': speciality,
+      'otherSpeciality': otherSpeciality,
       'years': years,
       'img': img,
       'phone': phone,

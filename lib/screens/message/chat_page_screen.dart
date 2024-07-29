@@ -4,7 +4,7 @@ import 'package:nuncare_mobile_firebase/components/my_chat_bubble.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
-import 'package:nuncare_mobile_firebase/services/user_service.dart';
+import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 
 class ChatPageScreen extends StatefulWidget {
   const ChatPageScreen({
@@ -22,7 +22,7 @@ class ChatPageScreen extends StatefulWidget {
 class _ChatPageScreenState extends State<ChatPageScreen> {
   final TextEditingController _messageController = TextEditingController();
 
-  final UserService _userService = UserService();
+  final ChatService _chatService = ChatService();
   final AuthService _auth = AuthService();
 
   FocusNode myFocusNode = FocusNode();
@@ -65,8 +65,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     if (_messageController.text.trim().isEmpty) {
       return;
     }
-    await _userService.sendMessage(
-        widget.receiverId, _messageController.text, widget.receiverName);
+    await _chatService.sendMessage(widget.receiverId, _messageController.text);
     _messageController.clear();
     scrollDown();
   }
@@ -98,7 +97,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   Widget _buildMessageList() {
     String senderId = _auth.getCurrentUser()!.uid;
     return StreamBuilder(
-      stream: _userService.getMessages(senderId, widget.receiverId),
+      stream: _chatService.getMessages(senderId, widget.receiverId),
       builder: (ctx, snapshot) {
         if (snapshot.hasError) {
           return const Text("Erreur lors du chargement des messages");
@@ -131,7 +130,12 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
         crossAxisAlignment:
             isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          MyChatBubble(message: data["message"], isCurrentUser: isCurrentUser)
+          MyChatBubble(
+            message: data["message"],
+            isCurrentUser: isCurrentUser,
+            messageId: doc.id,
+            userId: data['senderId'],
+          )
         ],
       ),
     );

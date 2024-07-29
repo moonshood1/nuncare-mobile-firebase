@@ -4,41 +4,34 @@ class Message {
   final String senderId;
   final String senderEmail;
   final String receiverId;
-  final String receiverName;
   final String message;
-  final Timestamp? timestamp;
-  final String? messageTime;
+  final Timestamp timestamp;
 
   Message({
     required this.senderId,
     required this.senderEmail,
     required this.receiverId,
-    required this.receiverName,
     required this.message,
-    this.timestamp,
-    this.messageTime,
+    required this.timestamp,
   });
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      senderId: json['senderId'],
-      receiverId: json['receiverId'],
-      senderEmail: json['senderEmail'],
-      receiverName: json['receiverName'],
-      message: json['message'],
-      messageTime: json['messageTime'],
-      // timestamp: json['timestamp'],
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
       'senderId': senderId,
       'senderEmail': senderEmail,
       'receiverId': receiverId,
-      'receiverName': receiverName,
       'message': message,
-      'timestamp': timestamp
+      'timestamp': timestamp,
     };
+  }
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      senderId: json['senderId'],
+      senderEmail: json['senderEmail'],
+      receiverId: json['receiverId'],
+      message: json['message'],
+      timestamp: json['timestamp'],
+    );
   }
 }

@@ -36,7 +36,7 @@ const List<String> defaultSpecialities = [
   "Ophtalmologie",
   "Oto-rhino-laryngologie",
   "Urologie",
-  "Inconnue"
+  "Autre"
 ];
 
 const Map<String, List<String>> defaultDistricts = {
@@ -45,7 +45,7 @@ const Map<String, List<String>> defaultDistricts = {
   "Comoé": ["Sud-Comoé", "Indénié-Djuablin"],
   "Denguélé": ["Kabadougou", "Folon"],
   "Gôh-Djiboua": ["Gôh", "Lôh-Djiboua"],
-  "Lacs": ["Bélier", "Ifou", "N'zi"],
+  "Lacs": ["Bélier", "Ifou", "N'zi", "Moronou"],
   "Lagunes": ["Agnéby-Tiassa", "Grands-Ponts", "La Mé"],
   "Montagnes": ["Cavally", "Guémon", "Tonkpi"],
   "Sassandra-Marahoué": ["Haut-Sassandra", "Marahoué"],
@@ -89,5 +89,4 @@ const Map<String, List<String>> defaultRegions = {
   "Bafing": ["", ""],
   "Worodougou": ["", ""],
   "Zanzan": ["", ""],
-  "Inconnue": ["", ""],
 };

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/constants/uris.dart';
 import 'package:nuncare_mobile_firebase/models/ad_model.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
@@ -600,6 +602,107 @@ class ResourceService {
           doctorsData.map((data) => Doctor.fromJson(data)).toList();
 
       return doctors;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getRegionsForSpecificDistrict(String district) async {
+    try {
+      return defaultDistricts[district] ?? [];
+    } catch (e) {
+      throw Exception('Erreur lors de la récupération des regions : $e');
+    }
+  }
+
+  Future<List<String>> getSpecialities() async {
+    final url = Uri.parse(
+      "$resourcesUri/specialities",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<String> specialitiesData =
+          responseData['specialities'].cast<String>();
+
+      return specialitiesData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getDistricts() async {
+    final url = Uri.parse(
+      "$resourcesUri/districts",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> districtsData =
+          responseData['districts'].cast<String>();
+
+      return districtsData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getRegionsForSelectedDistrict(String district) async {
+    final url = Uri.parse(
+      "$resourcesUri/regions-search?districtName=$district",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> regionsData = responseData['regions'] ?? [];
+
+      return regionsData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getCitiesForSelectedRegion(String region) async {
+    final url = Uri.parse(
+      "$resourcesUri/cities-search?regionName=$region",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> citiesData = responseData['cities'] ?? [];
+
+      return citiesData;
     } else {
       return [];
     }

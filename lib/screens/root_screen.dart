@@ -29,15 +29,12 @@ class _RootPageScreenState extends State<RootPageScreen> {
     switch (activeScreen) {
       case 1:
         screenWidget = const AnnuaryPageScreen();
-
         break;
       case 2:
         screenWidget = const MessagePageScreen();
-
         break;
       case 3:
         screenWidget = const ProfilePageScreen();
-
         break;
     }
 
@@ -62,15 +59,15 @@ class _RootPageScreenState extends State<RootPageScreen> {
             label: "Annuaire",
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
-          // BottomNavigationBarItem(
-          //   icon: const Icon(Icons.chat_bubble),
-          //   // icon: Image.asset(
-          //   //   'assets/icons/discuter.png',
-          //   //   width: 35,
-          //   // ),
-          //   label: "Messagerie",
-          //   backgroundColor: Theme.of(context).colorScheme.primary,
-          // ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.chat_bubble),
+            // icon: Image.asset(
+            //   'assets/icons/discuter.png',
+            //   width: 35,
+            // ),
+            label: "Messagerie",
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
             // icon: Image.asset(

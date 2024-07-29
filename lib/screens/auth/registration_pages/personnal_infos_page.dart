@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/utils/phone_formatter.dart';
-import 'package:nuncare_mobile_firebase/validators/long_text_validator.dart';
 import 'package:nuncare_mobile_firebase/validators/name_validator.dart';
 import 'package:nuncare_mobile_firebase/validators/number_validator.dart';
 
@@ -12,7 +11,6 @@ class PersonalInfosPage extends StatefulWidget {
     required this.firstnameController,
     required this.lastnameController,
     required this.phoneController,
-    required this.bioController,
     required this.selectedGender,
     required this.onChangeGender,
   });
@@ -20,8 +18,7 @@ class PersonalInfosPage extends StatefulWidget {
   final PageController controller;
   final TextEditingController firstnameController,
       lastnameController,
-      phoneController,
-      bioController;
+      phoneController;
   String selectedGender;
   final void Function(String value) onChangeGender;
 
@@ -131,20 +128,20 @@ class _PersonalInfosPageState extends State<PersonalInfosPage>
               const SizedBox(
                 height: 20,
               ),
-              MyTextField(
-                controller: widget.bioController,
-                obscureText: false,
-                isHidden: false,
-                icon: Icons.folder_copy,
-                labelText: 'Bio',
-                validator: (value) => validateLongText(value, 'La bio', 10),
-                textCapitalization: TextCapitalization.none,
-                autoCorrect: false,
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              // MyTextField(
+              //   controller: widget.bioController,
+              //   obscureText: false,
+              //   isHidden: false,
+              //   icon: Icons.folder_copy,
+              //   labelText: 'Bio',
+              //   validator: (value) => validateLongText(value, 'La bio', 10),
+              //   textCapitalization: TextCapitalization.none,
+              //   autoCorrect: false,
+              //   keyboardType: TextInputType.text,
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
               MyTextField(
                 controller: widget.phoneController,
                 obscureText: false,

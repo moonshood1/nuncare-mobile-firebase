@@ -153,27 +153,38 @@ class UserService {
     final String currentUserEmail = _auth.currentUser!.email!;
     final Timestamp timestamp = Timestamp.now();
 
-    Message newMessage = Message(
-      senderId: currentUserId,
-      senderEmail: currentUserEmail,
-      receiverName: receiverName,
-      receiverId: receiverId,
-      message: message,
-      timestamp: timestamp,
-    );
+    // Message newMessage = Message(
+    //   senderId: currentUserId,
+    //   senderEmail: currentUserEmail,
+    //   receiverName: receiverName,
+    //   receiverId: receiverId,
+    //   message: message,
+    //   timestamp: timestamp,
+    // );
 
     List<String> ids = [currentUserId, receiverId];
     ids.sort();
     String chatRoomId = ids.join('_');
-    print('message envoyé a la chatRoom ${chatRoomId} -- $newMessage');
 
-    await registerChatRoom(receiverId, chatRoomId);
+    // await registerChatRoom(receiverId, chatRoomId);
+    await registerChatRoomInFireStore(
+      currentUserId,
+      chatRoomId,
+      receiverId,
+      receiverName,
+    );
+    await registerChatRoomInFireStore(
+      receiverId,
+      chatRoomId,
+      currentUserId,
+      currentUserEmail,
+    );
 
     await _firestore
         .collection('Chat_rooms')
         .doc(chatRoomId)
-        .collection('messages')
-        .add(newMessage.toJson());
+        .collection('messages');
+    // .add(newMessage.toJson());
   }
 
   Stream<QuerySnapshot> getMessages(String userId, otherUserId) {
@@ -186,6 +197,34 @@ class UserService {
         .doc(chatRoomId)
         .collection('messages')
         .orderBy("timestamp", descending: false)
+        .snapshots();
+  }
+
+  Future<void> registerChatRoomInFireStore(
+    String userId,
+    String chatRoomId,
+    String receiverId,
+    String receiverName,
+  ) async {
+    await _firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('chatRooms')
+        .doc(chatRoomId)
+        .set({
+      'chatRoomId': chatRoomId,
+      'receiverId': receiverId,
+      'receiverName': receiverName,
+      'lastUpdated': Timestamp.now(),
+    });
+  }
+
+  Stream<QuerySnapshot> getUserChatRooms(String userId) {
+    return _firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('chatRooms')
+        .orderBy('lastUpdated', descending: true)
         .snapshots();
   }
 
@@ -379,4 +418,10 @@ class UserService {
       throw Exception("Erreur lors de l'enregistrement du like : $e");
     }
   }
+
+  // METHODE CHATS
+
+  // Future<bool> checkChatExists(String uid1,String uid2) async {
+  //   String chatID = 
+  // }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/screens/policy/policy_screen_page.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';
@@ -113,6 +114,7 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             decoration: TextDecoration.underline,
+                            fontSize: 14,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => Navigator.push(
@@ -171,7 +173,7 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.grey,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
+                          horizontal: 10,
                           vertical: 10,
                         ),
                         shape: RoundedRectangleBorder(
@@ -194,30 +196,31 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
                 Expanded(
                   child: SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        widget.onSubmit();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 2,
-                        foregroundColor: Colors.white,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 10,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        "S'inscrire",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    ),
+                    child: widget.isLoading
+                        ? const MyLoadingCirle()
+                        : ElevatedButton(
+                            onPressed: widget.onSubmit,
+                            style: ElevatedButton.styleFrom(
+                              elevation: 2,
+                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              "S'inscrire",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ],
