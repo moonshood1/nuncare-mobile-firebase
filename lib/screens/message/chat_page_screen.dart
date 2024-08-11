@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_chat_bubble.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
+import 'package:nuncare_mobile_firebase/screens/message/message_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 

@@ -20,6 +20,7 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
   @override
   void initState() {
     super.initState();
+    print("Initialisation ");
   }
 
   @override
@@ -39,7 +40,7 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
 
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: _chatService.getUserStream(),
+      stream: _chatService.getUserStreamExcludingBlockedUsers(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Padding(
@@ -82,15 +83,19 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
     if (userData["email"] != _authService.getCurrentUser()!.email) {
       return MyUserTile(
         text: "${userData["email"]}",
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (ctx) => ChatPageScreen(
-              receiverName: "${userData["email"]}",
-              receiverId: userData['uid'],
+        onTap: () async {
+          await _chatService.markMessagesAsRead(userData['uid']);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => ChatPageScreen(
+                receiverName: "${userData["email"]}",
+                receiverId: userData['uid'],
+              ),
             ),
-          ),
-        ),
+          );
+        },
+        unreadMessagesCount: userData['unreadCount'],
       );
     } else {
       return Container();

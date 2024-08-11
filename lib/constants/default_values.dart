@@ -39,6 +39,12 @@ const List<String> defaultSpecialities = [
   "Autre"
 ];
 
+const List<String> defaultUniversities = [
+  "UFR Sciences Médicales Abidjan",
+  "UFR Sciences Médicales Bouake",
+  "Autre"
+];
+
 const Map<String, List<String>> defaultDistricts = {
   "Abidjan": ["Abidjan"],
   "Bas-Sassandra": ["Gbôklé", "Nawa", "San-Pédro"],

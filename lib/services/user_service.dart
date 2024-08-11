@@ -32,7 +32,7 @@ class UserService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        print(responseData['user']);
+
         final Doctor doctor = Doctor.fromJson(responseData['user']);
 
         return doctor;
@@ -422,6 +422,6 @@ class UserService {
   // METHODE CHATS
 
   // Future<bool> checkChatExists(String uid1,String uid2) async {
-  //   String chatID = 
+  //   String chatID =
   // }
 }

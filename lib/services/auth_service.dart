@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,6 +18,9 @@ class BasicResponse {
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   User? getCurrentUser() {
     return _auth.currentUser;
   }
@@ -72,9 +77,62 @@ class AuthService {
     try {
       return await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      print("ERROR SENDING PASSWORD RESET ");
+      print("error reset password ");
       print(e);
       throw Exception(e.code);
+    }
+  }
+
+  Future<void> setupPushNotifications() async {
+    try {
+      await _fcm.requestPermission();
+
+      final token = await _fcm.getToken();
+      if (token != null) {
+        print('FCM token : $token');
+        await sendFCMTokenToServer(token);
+      }
+    } catch (err) {
+      print('error getting fcm $err');
+    }
+  }
+
+  Future<void> sendFCMTokenToServer(String token) async {
+    try {
+      final userToken = await _auth.currentUser?.getIdToken();
+
+      if (userToken == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final url = Uri.parse('$authUri/store-fcm-token');
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $userToken',
+        },
+        body: json.encode({'token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        print('Token stored successfully');
+      } else {
+        print('Failed to store token: ${response.statusCode}');
+      }
+    } catch (err) {
+      print('error storing fcm token $err');
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    User? user = getCurrentUser();
+
+    if (user != null) {
+      await _firestore.collection('Users').doc(user.uid).delete();
+
+      await user.delete();
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/services/chat_service.dart';
+import 'package:nuncare_mobile_firebase/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyChatBubble extends StatelessWidget {
   const MyChatBubble({
@@ -30,8 +32,8 @@ class MyChatBubble extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
                   _reportContent(context, messageId, userId);
+                  Navigator.pop(context);
                 },
               ),
               ListTile(
@@ -84,8 +86,8 @@ class MyChatBubble extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
               ChatService().reportUser(messageId, userId);
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Message signalé"),
@@ -117,8 +119,9 @@ class MyChatBubble extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
               ChatService().blockUser(userId);
+              Navigator.pop(context);
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Utilisateur bloqué"),
@@ -134,6 +137,9 @@ class MyChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+
     return GestureDetector(
       onLongPress: () {
         if (!isCurrentUser) {

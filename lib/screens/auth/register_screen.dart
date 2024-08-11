@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/login_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/auth/registration_pages/location_infos_page.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/registration_steps.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/registration_pages/personnal_infos_page.dart';
@@ -31,9 +32,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _yearsController = TextEditingController();
   final TextEditingController _promotionController = TextEditingController();
   final TextEditingController _orderNumberController = TextEditingController();
+  final TextEditingController _hospitalController = TextEditingController();
   String? _selectedSpeciality;
+  String? _selectedUniversity;
   String? _selectedDistrict;
   String? _selectedRegion;
+  String? _selectedCity;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
@@ -78,6 +82,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _selectedSpeciality = value;
   }
 
+  void _handleSelectUniversity(String? value) {
+    _selectedUniversity = value;
+  }
+
   void _handleSelectDistrict(String? value) {
     _selectedDistrict = value;
     getRegionsForDistrict(value!);
@@ -85,6 +93,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _handleSelectRegion(String? value) {
     _selectedRegion = value;
+  }
+
+  void _handleSelectcity(String? value) {
+    _selectedCity = value;
   }
 
   int _pageIndex = 0;
@@ -106,13 +118,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         yearsController: _yearsController,
         promotionController: _promotionController,
         orderNumberController: _orderNumberController,
-        selectedDistrict: _selectedDistrict,
-        selectedRegion: _selectedRegion,
+        hospitalController: _hospitalController,
+        selectedUniversity: _selectedUniversity,
         selectedSpeciality: _selectedSpeciality,
-        regions: _regionsForSelectedDistrict,
-        onChangeDistrict: _handleSelectDistrict,
         onChangeSpeciality: _handleSelectSpeciality,
+        onchangeUniversity: _handleSelectUniversity,
+      ),
+      LocationPageInfos(
+        controller: _pageController,
+        selectedCity: _selectedCity,
+        onChangeDistrict: _handleSelectDistrict,
         onChangeRegion: _handleSelectRegion,
+        onChangeCity: _handleSelectcity,
       ),
       SecurityPageInfos(
         controller: _pageController,
@@ -142,6 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _yearsController.dispose();
     _promotionController.dispose();
     _orderNumberController.dispose();
+    _hospitalController.dispose();
     super.dispose();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_account_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_info_box.dart';
@@ -334,7 +335,9 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         ),
         backgroundColor: Colors.white,
       ),
-      drawer: MyDrawer(),
+      drawer: MyAccountDrawer(
+        doctor: currentUser,
+      ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {},
       //   child: const Icon(

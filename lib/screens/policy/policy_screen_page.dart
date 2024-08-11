@@ -13,7 +13,7 @@ class PolicyScreenPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Politique de confidentialité",
+          "Termes et conditions",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,
@@ -37,14 +37,14 @@ class PolicyScreenPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "1. Introduction",
+                "CONDITIONS D'UTILISATION DE NUNCARE",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               Text(
-                "Bienvenue sur Nuncare. En utilisant notre Application, vous acceptez les termes et conditions suivants . Veuillez les lire attentivement. Si vous n'acceptez pas ces Termes, veuillez ne pas utiliser l'Application.",
+                "Bienvenue sur NUNCARE ! Avant d'utiliser notre application, veuillez lire attentivement les conditions d'utilisation suivantes :",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
@@ -53,148 +53,103 @@ class PolicyScreenPage extends StatelessWidget {
                 height: 40,
               ),
               Text(
-                "2. Services",
+                "Acceptation des Conditions ",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "L'Application offre une plateforme permettant aux utilisateurs de consulter des informations médicales, de prendre rendez-vous avec des médecins, et de recevoir des conseils médicaux. Les services fournis ne remplacent pas une consultation en personne avec un professionnel de santé qualifié.",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "3. Utilisation de l'Application",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "L'Application offre une plateforme permettant aux utilisateurs de consulter des informations médicales, de prendre rendez-vous avec des médecins, et de recevoir des conseils médicaux. Les services fournis ne remplacent pas une consultation en personne avec un professionnel de santé qualifié.",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                ),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "a. Inscription : Pour utiliser certains services, vous devez créer un compte en fournissant des informations exactes et à jour. Vous êtes responsable de la confidentialité de vos informations de compte.",
+                "En utilisant l'application NUNCARE, vous acceptez automatiquement les présentes conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser l'application.",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Objectif de l'Application ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "b. Exactitude des Informations : Vous devez fournir des informations médicales et personnelles exactes et complètes. Toute information incorrecte peut entraîner des conséquences sur les services fournis.",
+                "NUNCARE est une application médicale qui vise à faciliter la mise en relation entre les professionnels de santé et les patients pour la prise de rendez-vous médicaux et la recherche d'informations médicales générales. L'application ne doit pas être utilisée comme substitut à une consultation médicale professionnelle",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Utilisation Personnelle",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "c. Utilisation Autorisée : Vous acceptez d'utiliser l'Application uniquement à des fins légales et conformément aux lois et règlements applicables. Toute utilisation abusive ou non autorisée peut entraîner la suspension ou la résiliation de votre compte.",
+                "Vous vous engagez à utiliser l'application NUNCARE uniquement à des fins personnelles et non commerciales. Toute utilisation de l'application à des fins commerciales est strictement interdite sans l'autorisation préalable de NUNCARE.",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Text(
-                "5. Limitation de Responsabilité",
+                "Protection des Données Personnelles ",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "a. Absence de Garantie : Les informations fournies sur l'Application sont à titre informatif uniquement. Nous ne garantissons pas l'exactitude, la complétude ou la pertinence des informations fournies.",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                ),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "b. Conseils Médicaux : Les conseils médicaux fournis par l'intermédiaire de l'Application ne remplacent pas une consultation en personne avec un médecin. En cas d'urgence médicale, contactez immédiatement les services d'urgence.",
+                "NUNCARE s'engage à protéger la confidentialité et la sécurité de vos données personnelles conformément aux lois et réglementations en vigueur sur la protection des données en Côte d’Ivoire. En utilisant l'application, vous consentez à la collecte, au traitement et à l'utilisation de vos données personnelles par NUNCARE dans le but de fournir les services demandés.",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Responsabilité de l'Utilisateur s",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "c. Responsabilité Limitée : Nous ne serons pas responsables des dommages directs, indirects, spéciaux, consécutifs ou punitifs résultant de l'utilisation de l'Application ou de l'incapacité à l'utiliser.",
+                "Vous êtes seul responsable de l'exactitude et de la légalité des informations que vous fournissez via l'application. NUNCARE décline toute responsabilité en cas de dommages ou de préjudices résultant de l'utilisation de l'application ou de la confiance accordée aux informations fournies par celle-ci.",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Text(
-                "6. Propriété Intellectuelle",
+                "Propriété Intellectuelle",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
               Text(
-                "Tous les contenus, y compris les textes, graphiques, logos, et logiciels, sont la propriété de l'Application ou de ses concédants de licence et sont protégés par les lois sur la propriété intellectuelle. Vous ne pouvez pas copier, distribuer, modifier ou utiliser ces contenus sans autorisation.",
+                "Tous les droits de propriété intellectuelle relatifs à l'application NUNCARE, y compris les droits d'auteur, les marques de commerce et les brevets, sont la propriété exclusive de NUNCARE. Vous vous engagez à ne pas copier, modifier, distribuer ou reproduire l'application sans l'autorisation écrite préalable de NUNCARE.",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Text(
-                "7. Modifications des Termes",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "Nous nous réservons le droit de modifier ces Termes à tout moment. Les modifications seront effectives dès leur publication sur l'Application. Il est de votre responsabilité de consulter régulièrement les Termes. Votre utilisation continue de l'Application constitue votre acceptation des modifications.",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "8. Résiliation",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "Nous nous réservons le droit de suspendre ou de résilier votre accès à l'Application à tout moment, sans préavis, pour toute violation des Termes ou pour toute autre raison à notre discrétion.",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "9. Droit Applicable",
+                "Modifications des Conditions ",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -207,33 +162,28 @@ class PolicyScreenPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 40,
-              ),
-              Text(
-                "10. Contact",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
                 height: 30,
               ),
               Text(
-                "Pour toute question ou préoccupation concernant ces Termes, veuillez nous contacter à l'adresse suivante : info@nuncare.pro",
+                "En utilisant l'application NUNCARE, vous reconnaissez avoir lu, compris et accepté les présentes conditions d'utilisation. Si vous avez des questions ou des préoccupations concernant ces conditions, veuillez nous contacter à l'adresse suivante : [infonuncare@gmail.com ; www.nuncare.pro].",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Text(
-                "11. Acceptation des Termes",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                "Merci de votre confiance et bonne utilisation de NUNCARE !",
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               Text(
-                "En utilisant l'Application, vous reconnaissez avoir lu, compris et accepté ces Termes.",
+                "L'Équipe NUNCARE!",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                 ),

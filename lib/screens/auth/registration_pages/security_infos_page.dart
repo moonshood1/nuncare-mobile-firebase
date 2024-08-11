@@ -130,27 +130,27 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
                 ),
               ],
             ),
-            Row(
-              children: [
-                Checkbox(
-                  value: widget.dataTermsCheck,
-                  onChanged: (bool? newValue) {
-                    widget.dataTermsCheck = newValue ?? false;
-                    widget.onChangeTerms(newValue);
-                    setState(() {});
-                  },
-                ),
-                const Expanded(
-                  child: Text(
-                    "Je consens à la collecte et à l'utilisation de mes données sensibles.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Checkbox(
+            //       value: widget.dataTermsCheck,
+            //       onChanged: (bool? newValue) {
+            //         widget.dataTermsCheck = newValue ?? false;
+            //         widget.onChangeTerms(newValue);
+            //         setState(() {});
+            //       },
+            //     ),
+            //     const Expanded(
+            //       child: Text(
+            //         "Je consens à la collecte et à l'utilisation de mes données sensibles.",
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.w300,
+            //           fontSize: 14,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(
               height: 20,
             ),

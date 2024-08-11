@@ -10,6 +10,8 @@ class Doctor {
   String hospital;
   String speciality;
   String? otherSpeciality;
+  String university;
+  String countryUniversity;
   int years;
   String img;
   String phone;
@@ -49,6 +51,8 @@ class Doctor {
     required this.promotion,
     required this.isActive,
     required this.deviceId,
+    required this.university,
+    required this.countryUniversity,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
@@ -62,6 +66,8 @@ class Doctor {
       hospital: json['hospital'] ?? '',
       speciality: json['speciality'],
       otherSpeciality: json['otherSpeciality'],
+      university: json['university'],
+      countryUniversity: json['countryUniversity'],
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
       district: json['district'],
@@ -88,6 +94,8 @@ class Doctor {
       'hospital': hospital,
       'speciality': speciality,
       'otherSpeciality': otherSpeciality,
+      'university': university,
+      'countryUniversity': countryUniversity,
       'years': years,
       'img': img,
       'phone': phone,
@@ -113,6 +121,8 @@ class Doctor {
       sex: '',
       hospital: '',
       speciality: '',
+      university: '',
+      countryUniversity: '',
       years: 0,
       img: '',
       phone: '',

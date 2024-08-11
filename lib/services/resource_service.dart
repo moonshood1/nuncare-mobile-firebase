@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
@@ -677,7 +676,7 @@ class ResourceService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      final List<String> regionsData = responseData['regions'] ?? [];
+      final List<String> regionsData = responseData['regions'].cast<String>();
 
       return regionsData;
     } else {
@@ -700,7 +699,7 @@ class ResourceService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      final List<String> citiesData = responseData['cities'] ?? [];
+      final List<String> citiesData = responseData['cities'].cast<String>();
 
       return citiesData;
     } else {

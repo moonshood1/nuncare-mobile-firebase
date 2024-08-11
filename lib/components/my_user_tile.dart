@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MyUserTile extends StatelessWidget {
-  const MyUserTile({super.key, required this.text, required this.onTap});
+  const MyUserTile({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.unreadMessagesCount = 0,
+  });
 
   final String text;
   final void Function()? onTap;
+  final int unreadMessagesCount;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +33,29 @@ class MyUserTile extends StatelessWidget {
             ],
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(
-                Icons.person,
-                size: 30,
+              Row(
+                children: [
+                  const Icon(
+                    Icons.person,
+                    size: 30,
+                  ),
+                  Text(text),
+                ],
               ),
-              Text(text),
+              unreadMessagesCount > 0
+                  ? Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade300,
+                      ),
+                      child: Text(
+                        unreadMessagesCount.toString(),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

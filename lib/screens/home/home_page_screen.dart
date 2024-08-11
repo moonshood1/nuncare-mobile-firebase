@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_ad_card.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
@@ -10,12 +11,11 @@ import 'package:nuncare_mobile_firebase/models/ad_model.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/medecine_model.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
-import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart';
 import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/other/doctors_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/news_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/other/notifications_page_screen.dart';
+import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
 class HomePageScreen extends StatefulWidget {

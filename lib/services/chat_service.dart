@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nuncare_mobile_firebase/constants/uris.dart';
 import 'package:nuncare_mobile_firebase/models/message_model.dart';
 
 class ChatService {
@@ -35,12 +34,34 @@ class ChatService {
 
       final userSnapshot = await _firestore.collection('Users').get();
 
-      return userSnapshot.docs
-          .where((doc) =>
-              doc.data()['email'] != currentUser!.email &&
-              !blockedUsersIds.contains(doc.id))
-          .map((doc) => doc.data())
-          .toList();
+      // return userSnapshot.docs
+      //     .where((doc) =>
+      //         doc.data()['email'] != currentUser!.email &&
+      //         !blockedUsersIds.contains(doc.id))
+      //     .map((doc) => doc.data())
+      //     .toList();
+      final userData = await Future.wait(
+        userSnapshot.docs
+            .where((doc) =>
+                doc.data()['email'] != currentUser.email &&
+                !blockedUsersIds.contains(doc.id))
+            .map((doc) async {
+          final userData = doc.data();
+          final chatroomId = [currentUser.uid, doc.id]..sort();
+          final unreadMessagesSnapshot = await _firestore
+              .collection('Chat_rooms')
+              .doc(chatroomId.join('_'))
+              .collection("messages")
+              .where('receiverId', isEqualTo: currentUser.uid)
+              .where('isRead', isEqualTo: false)
+              .get();
+
+          userData['unreadCount'] = unreadMessagesSnapshot.docs.length;
+
+          return userData;
+        }).toList(),
+      );
+      return userData;
     });
   }
 
@@ -55,6 +76,7 @@ class ChatService {
       receiverId: receiverId,
       message: message,
       timestamp: timestamp,
+      isRead: false,
     );
 
     List<String> ids = [currentUserId, receiverId];
@@ -79,6 +101,27 @@ class ChatService {
         .collection('messages')
         .orderBy("timestamp", descending: false)
         .snapshots();
+  }
+
+  Future<void> markMessagesAsRead(String receiverId) async {
+    final currentUserId = _auth.currentUser!.uid;
+
+    List<String> ids = [currentUserId, receiverId];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+
+    final unreadMessagesQuery = _firestore
+        .collection('Chat_rooms')
+        .doc(chatRoomId)
+        .collection('messages')
+        .where('receiverId', isEqualTo: currentUserId)
+        .where('isRead', isEqualTo: false);
+
+    final unreadMessagesSnapshot = await unreadMessagesQuery.get();
+
+    for (var doc in unreadMessagesSnapshot.docs) {
+      await doc.reference.update({'isRead': true});
+    }
   }
 
   Future<void> reportUser(String messageId, String userId) async {
