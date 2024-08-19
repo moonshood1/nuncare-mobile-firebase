@@ -20,7 +20,6 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
   @override
   void initState() {
     super.initState();
-    print("Initialisation ");
   }
 
   @override
@@ -40,7 +39,8 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
 
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: _chatService.getUserStreamExcludingBlockedUsers(),
+      // stream: _chatService.getUserStreamExcludingBlockedUsers(),
+      stream: _chatService.getUserStreamWithChatrooms(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Padding(

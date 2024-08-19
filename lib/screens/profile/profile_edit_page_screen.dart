@@ -4,6 +4,7 @@ import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
+import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
 import 'package:nuncare_mobile_firebase/validators/long_text_validator.dart';
 import 'package:nuncare_mobile_firebase/validators/name_validator.dart';
@@ -20,6 +21,9 @@ class ProfileEditPageScreen extends StatefulWidget {
 }
 
 class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
+  final UserService _userService = UserService();
+  final ResourceService _resourceService = ResourceService();
+
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
@@ -29,11 +33,61 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
   final TextEditingController _orderNumberController = TextEditingController();
   final TextEditingController _promotionController = TextEditingController();
   String? _selectedSpeciality;
+  String? _selectedUniversity;
   String? _selectedRegion;
+  String? _selectedCity;
+  String? _selectedDistrict;
+
+  bool _isDistrictSelected = false;
+  bool _isRegionSelected = false;
+
+  List<String> _districts = [];
+  List<String> _regions = [];
+  List<String> _cities = [];
 
   var _isLoading = false;
 
-  final UserService _userService = UserService();
+  void getDistricts() async {
+    try {
+      List<String> response = await _resourceService.getDistricts();
+
+      setState(() {
+        _districts = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getRegionsForDistrict(String district) async {
+    try {
+      List<String> response =
+          await _resourceService.getRegionsForSelectedDistrict(district);
+
+      setState(() {
+        _isDistrictSelected = true;
+        _regions = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getCitiesForRegion(String region) async {
+    try {
+      List<String> response =
+          await _resourceService.getCitiesForSelectedRegion(region);
+
+      print('villes obtenues : $response');
+
+      setState(() {
+        _isRegionSelected = true;
+        _cities = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
 
   @override
   void dispose() {
@@ -54,15 +108,20 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _lastNameController.text = widget.doctor.lastName;
     _bioController.text = widget.doctor.bio;
     _phoneController.text = widget.doctor.phone;
-    _selectedRegion = widget.doctor.region;
-
+    // _selectedRegion = widget.doctor.region;
+    // _selectedCity = widget.doctor.city;
+    // _selectedDistrict = widget.doctor.district;
     _selectedSpeciality = widget.doctor.speciality;
     _hospitalController.text = widget.doctor.hospital;
+    _hospitalController.text = widget.doctor.university;
     _orderNumberController.text = widget.doctor.orderNumber;
     _yearsController.text = widget.doctor.years.toString();
     _promotionController.text = widget.doctor.promotion;
 
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getDistricts();
+    });
   }
 
   void editProfile(BuildContext context, String field, dynamic value) async {
@@ -121,10 +180,14 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
         'lastName': _lastNameController.text.trim(),
         'phone': _phoneController.text.trim(),
         'hospital': _hospitalController.text.trim(),
+        'bio': _bioController.text.trim(),
+        'university': _selectedUniversity!.trim(),
         'orderNumber': _orderNumberController.text.trim(),
         'promotion': _promotionController.text.trim(),
         'years': _yearsController.text.trim(),
+        'district': _selectedDistrict!.trim(),
         'region': _selectedRegion!.trim(),
+        'city': _selectedCity!.trim(),
         'speciality': _selectedSpeciality!.trim(),
       };
       BasicResponse response =
@@ -299,6 +362,20 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
             const SizedBox(
               height: 20,
             ),
+            MySelectField(
+              label: 'Votre université',
+              items: defaultUniversities,
+              icon: Icons.school,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedUniversity = newValue;
+                });
+              },
+              selectedValue: _selectedUniversity,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             MyTextField(
               controller: _hospitalController,
               obscureText: false,
@@ -369,7 +446,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
               height: 10,
             ),
             const Text(
-              "Ici , choisissez votre région d'exercice",
+              "Ici , choisissez votre District , votre région et votre ville d'exercice",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w300,
@@ -379,15 +456,45 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
               height: 30,
             ),
             MySelectField(
-              label: 'Ma région',
-              items: defaultRegions.keys.toList(),
+              label: 'Votre District',
+              items: _districts,
+              icon: Icons.map,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedDistrict = newValue;
+                  getRegionsForDistrict(newValue!);
+                });
+              },
+              selectedValue: _selectedDistrict,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MySelectField(
+              label: 'Votre région',
+              items: _regions,
               icon: Icons.map,
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedRegion = newValue;
+                  getCitiesForRegion(newValue!);
                 });
               },
               selectedValue: _selectedRegion,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            MySelectField(
+              label: 'Votre Ville',
+              items: _cities,
+              icon: Icons.map,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedCity = newValue;
+                });
+              },
+              selectedValue: _selectedCity,
             ),
             const SizedBox(
               height: 30,

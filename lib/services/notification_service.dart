@@ -50,17 +50,21 @@ class NotificationService {
     FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
   }
 
-  void saveTokenToDatabase(String? token) {
+  void saveTokenToDatabase(String? token) async {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {
       FirebaseFirestore.instance.collection('Users').doc(userId).set(
-        {'fcmToken': token},
+        {
+          'fcmToken': token,
+        },
         SetOptions(
           merge: true,
         ),
       );
     }
+
+    // await
   }
 
   Future<void> clearTokenOnLogout(String userId) async {

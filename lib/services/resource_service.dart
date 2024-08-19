@@ -569,6 +569,32 @@ class ResourceService {
     });
   }
 
+  Future<List<Article>> getDoctorArticles(String userId) async {
+    final url = Uri.parse(
+      "$resourcesUri/doctors-articles?id=$userId",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<dynamic> articlesData = responseData['articles'] ?? [];
+
+      final List<Article> articles =
+          articlesData.map((data) => Article.fromJson(data)).toList();
+
+      return articles;
+    } else {
+      return [];
+    }
+  }
+
   Future<List<Doctor>> searchDoctorsWithParameters(
     String region,
     String speciality,

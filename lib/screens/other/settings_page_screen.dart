@@ -71,18 +71,18 @@ class SettingsPageScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Column(
           children: [
-            MySettingsListTile(
-              title: 'Mode sombre',
-              color: Colors.grey.shade200,
-              textColor: Colors.grey.shade600,
-              action: CupertinoSwitch(
-                value: Provider.of<ThemeProvider>(context, listen: false)
-                    .isDarkMode,
-                onChanged: (value) =>
-                    Provider.of<ThemeProvider>(context, listen: false)
-                        .toggleTheme(),
-              ),
-            ),
+            // MySettingsListTile(
+            //   title: 'Mode sombre',
+            //   color: Colors.grey.shade200,
+            //   textColor: Colors.grey.shade600,
+            //   action: CupertinoSwitch(
+            //     value: Provider.of<ThemeProvider>(context, listen: false)
+            //         .isDarkMode,
+            //     onChanged: (value) =>
+            //         Provider.of<ThemeProvider>(context, listen: false)
+            //             .toggleTheme(),
+            //   ),
+            // ),
             MySettingsListTile(
               title: 'Utilisateurs bloqués',
               color: Colors.grey.shade200,
@@ -102,20 +102,20 @@ class SettingsPageScreen extends StatelessWidget {
                 ),
               ),
             ),
-            MySettingsListTile(
-              title: 'Fermer le compte',
-              color: Colors.red.shade400,
-              textColor: Colors.white,
-              action: IconButton(
-                onPressed: () {
-                  deleteUserAccount(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            // MySettingsListTile(
+            //   title: 'Fermer le compte',
+            //   color: Colors.red.shade400,
+            //   textColor: Colors.white,
+            //   action: IconButton(
+            //     onPressed: () {
+            //       deleteUserAccount(context);
+            //     },
+            //     icon: const Icon(
+            //       Icons.arrow_forward,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:nuncare_mobile_firebase/components/my_account_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_article_row.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_info_box.dart';
+import 'package:nuncare_mobile_firebase/components/my_info_tile.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
@@ -248,49 +249,52 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             ),
           ],
         ),
-        MyInfoBox(
-          text: currentUser.lastName,
-          sectionName: 'Nom de famille',
+        const SizedBox(
+          height: 20,
         ),
-        MyInfoBox(
-          text: currentUser.firstName,
-          sectionName: 'Prénom',
+        MyInfoTile(
+          text: "${currentUser.firstName} ${currentUser.lastName}",
+          title: "Nom complet",
         ),
-        MyInfoBox(
-          text: currentUser.bio,
-          sectionName: 'Bio',
-        ),
-        MyInfoBox(
-          text: currentUser.orderNumber,
-          sectionName: "Numéro d'ordre",
-        ),
-        MyInfoBox(
-          text: currentUser.promotion.toString(),
-          sectionName: "Promotion",
-        ),
-        MyInfoBox(
-          text: currentUser.hospital,
-          sectionName: 'Hopital',
-        ),
-        MyInfoBox(
-          text: currentUser.speciality,
-          sectionName: 'Spécialité',
-        ),
-        MyInfoBox(
-          text: currentUser.years.toString(),
-          sectionName: "Années d'expérience",
-        ),
-        MyInfoBox(
+        MyInfoTile(
           text: currentUser.phone,
-          sectionName: 'Téléphone',
+          title: "Numéro de téléphone",
         ),
-        // MyInfoBox(
-        //   text: currentUser.city,
-        //   sectionName: 'Ville',
-        // ),
-        MyInfoBox(
+        MyInfoTile(
+          text: currentUser.speciality,
+          title: "Specialité",
+        ),
+        MyInfoTile(
+          text: currentUser.university,
+          title: "Université de formation",
+        ),
+        MyInfoTile(
+          text: currentUser.promotion,
+          title: "Promotion",
+        ),
+        MyInfoTile(
+          text: currentUser.hospital,
+          title: "Hopital d'exercice",
+        ),
+        MyInfoTile(
+          text: currentUser.years.toString(),
+          title: "Nombre d'années d'experience",
+        ),
+        MyInfoTile(
+          text: currentUser.orderNumber,
+          title: "Numéro d'ordre",
+        ),
+        MyInfoTile(
+          text: currentUser.district,
+          title: "District",
+        ),
+        MyInfoTile(
           text: currentUser.region,
-          sectionName: 'Région',
+          title: "Région",
+        ),
+        MyInfoTile(
+          text: currentUser.city,
+          title: "Ville",
         ),
         const SizedBox(
           height: 40,

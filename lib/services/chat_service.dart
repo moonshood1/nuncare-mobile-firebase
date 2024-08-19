@@ -33,13 +33,6 @@ class ChatService {
       final blockedUsersIds = snapshot.docs.map((doc) => doc.id).toList();
 
       final userSnapshot = await _firestore.collection('Users').get();
-
-      // return userSnapshot.docs
-      //     .where((doc) =>
-      //         doc.data()['email'] != currentUser!.email &&
-      //         !blockedUsersIds.contains(doc.id))
-      //     .map((doc) => doc.data())
-      //     .toList();
       final userData = await Future.wait(
         userSnapshot.docs
             .where((doc) =>
@@ -48,6 +41,7 @@ class ChatService {
             .map((doc) async {
           final userData = doc.data();
           final chatroomId = [currentUser.uid, doc.id]..sort();
+
           final unreadMessagesSnapshot = await _firestore
               .collection('Chat_rooms')
               .doc(chatroomId.join('_'))
@@ -61,6 +55,124 @@ class ChatService {
           return userData;
         }).toList(),
       );
+      return userData;
+    });
+  }
+
+  // Stream<List<Map<String, dynamic>>> getUserStreamWithChatrooms() {
+  //   final currentUser = _auth.currentUser;
+
+  //   return _firestore
+  //       .collection('Users')
+  //       .snapshots()
+  //       .asyncMap((snapshot) async {
+  //     List<String> userIdsWithChatrooms = [];
+
+  //     final allUsers = snapshot.docs.map((doc) => doc.id).toList();
+
+  //     final chatRoomIds = await Future.wait(allUsers
+  //         .map((userId) async {
+  //           List<String> ids = [currentUser!.uid, userId];
+  //           ids.sort();
+  //           String chatRoomId = ids.join('_');
+
+  //           final messagesSnapshot = await _firestore
+  //               .collection('Chat_rooms')
+  //               .doc(chatRoomId)
+  //               .collection('messages')
+  //               .get();
+
+  //           if (messagesSnapshot.docs.isNotEmpty) {
+  //             return userId;
+  //           }
+  //           return null;
+  //         })
+  //         .where((id) => id != null)
+  //         .toList());
+
+  //     userIdsWithChatrooms = chatRoomIds.whereType<String>().toList();
+
+  //     if (userIdsWithChatrooms.isEmpty) {
+  //       return [];
+  //     }
+
+  //     final usersSnapshot = await _firestore
+  //         .collection('Users')
+  //         .where(FieldPath.documentId, whereIn: userIdsWithChatrooms)
+  //         .get();
+
+  //     return usersSnapshot.docs.map((doc) {
+  //       final user = doc.data();
+  //       return user;
+  //     }).toList();
+  //   });
+  // }
+
+  Stream<List<Map<String, dynamic>>> getUserStreamWithChatrooms() {
+    final currentUser = _auth.currentUser;
+
+    return _firestore
+        .collection('Users')
+        .snapshots()
+        .asyncMap((snapshot) async {
+      List<String> userIdsWithChatrooms = [];
+
+      final allUsers = snapshot.docs.map((doc) => doc.id).toList();
+
+      // Récupérer les IDs des utilisateurs avec des chatrooms ayant des messages
+      final chatRoomIds = await Future.wait(allUsers
+          .map((userId) async {
+            List<String> ids = [currentUser!.uid, userId];
+            ids.sort();
+            String chatRoomId = ids.join('_');
+
+            final messagesSnapshot = await _firestore
+                .collection('Chat_rooms')
+                .doc(chatRoomId)
+                .collection('messages')
+                .get();
+
+            if (messagesSnapshot.docs.isNotEmpty) {
+              return userId;
+            }
+            return null;
+          })
+          .where((id) => id != null)
+          .toList());
+
+      userIdsWithChatrooms = chatRoomIds.whereType<String>().toList();
+
+      if (userIdsWithChatrooms.isEmpty) {
+        return [];
+      }
+
+      // Récupérer les détails des utilisateurs avec les IDs récupérés
+      final usersSnapshot = await _firestore
+          .collection('Users')
+          .where(FieldPath.documentId, whereIn: userIdsWithChatrooms)
+          .get();
+
+      // Ajouter le comptage des messages non lus
+      final userData = await Future.wait(
+        usersSnapshot.docs.map((doc) async {
+          final user = doc.data();
+          final chatroomId = [currentUser!.uid, doc.id]..sort();
+          final chatRoomDocId = chatroomId.join('_');
+
+          final unreadMessagesSnapshot = await _firestore
+              .collection('Chat_rooms')
+              .doc(chatRoomDocId)
+              .collection("messages")
+              .where('receiverId', isEqualTo: currentUser.uid)
+              .where('isRead', isEqualTo: false)
+              .get();
+
+          user['unreadCount'] = unreadMessagesSnapshot.docs.length;
+
+          return user;
+        }).toList(),
+      );
+
       return userData;
     });
   }

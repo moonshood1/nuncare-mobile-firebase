@@ -3,6 +3,7 @@ import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart
 import 'package:nuncare_mobile_firebase/screens/home/home_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/message/message_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/profile/profile_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/test/test_screen_page.dart';
 
 class RootPageScreen extends StatefulWidget {
   const RootPageScreen({super.key});
@@ -36,6 +37,9 @@ class _RootPageScreenState extends State<RootPageScreen> {
       case 3:
         screenWidget = const ProfilePageScreen();
         break;
+      // case 4:
+      //   screenWidget = const TestPageScreen();
+      //   break;
     }
 
     return Scaffold(
@@ -76,7 +80,16 @@ class _RootPageScreenState extends State<RootPageScreen> {
             // ),
             label: "Profil",
             backgroundColor: Theme.of(context).colorScheme.primary,
-          )
+          ),
+          // BottomNavigationBarItem(
+          //   icon: const Icon(Icons.door_back_door),
+          //   // icon: Image.asset(
+          //   //   'assets/icons/utilisateur.png',
+          //   //   width: 35,
+          //   // ),
+          //   label: "Test",
+          //   backgroundColor: Theme.of(context).colorScheme.primary,
+          // ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
