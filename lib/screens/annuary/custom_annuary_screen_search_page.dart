@@ -3,6 +3,7 @@ import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_selectfield.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
+import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 import 'package:nuncare_mobile_firebase/validators/number_validator.dart';
 
 class CustomAnnuaryScreenPage extends StatefulWidget {
@@ -14,15 +15,28 @@ class CustomAnnuaryScreenPage extends StatefulWidget {
 }
 
 class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
-  String? _selectedSpeciality;
-  String? _selectedRegion;
-  var _isLoading = false;
+  final ResourceService _resourceService = ResourceService();
 
-  final TextEditingController _promotionController = TextEditingController();
+  String? _selectedSpeciality;
+  String? _selectedDistrict;
+  String? _selectedRegion;
+  String? _selectedCity;
+  String? _selectedUniversity;
+  String? _selectedGender;
+  String? _selectedPromotion;
+
+  var _isLoading = false;
+  bool _isDistrictSelected = false;
+  bool _isRegionSelected = false;
+
+  List<String> _specialities = [];
+  List<String> _districts = [];
+  List<String> _regions = [];
+  List<String> _cities = [];
+  List<String> _promotions = [];
 
   @override
   void dispose() {
-    _promotionController.dispose();
     super.dispose();
   }
 
@@ -32,13 +46,92 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
     });
 
     Navigator.of(context).pop({
+      'district': _selectedDistrict,
       'region': _selectedRegion,
+      'city': _selectedCity,
       'speciality': _selectedSpeciality ?? '',
-      'promotion': _promotionController.text
+      'promotion': _selectedPromotion,
+      'university': _selectedUniversity,
+      'gender': _selectedGender
     });
 
     setState(() {
       _isLoading = false;
+    });
+  }
+
+  void getSpecialities() async {
+    try {
+      List<String> response = await _resourceService.getSpecialities();
+
+      setState(() {
+        _specialities = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getDistricts() async {
+    try {
+      List<String> response = await _resourceService.getDistricts();
+
+      setState(() {
+        _districts = response;
+        _isDistrictSelected = true;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getPromotions() async {
+    try {
+      List<String> response = await _resourceService.getPromotions();
+
+      setState(() {
+        _promotions = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getRegionsForDistrict(String district) async {
+    try {
+      List<String> response =
+          await _resourceService.getRegionsForSelectedDistrict(district);
+
+      setState(() {
+        _isRegionSelected = true;
+        _regions = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getCitiesForRegion(String region) async {
+    try {
+      List<String> response =
+          await _resourceService.getCitiesForSelectedRegion(region);
+
+      setState(() {
+        _isRegionSelected = true;
+        _cities = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getSpecialities();
+      getDistricts();
+      getPromotions();
     });
   }
 
@@ -64,21 +157,54 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
               height: 20,
             ),
             MySelectField(
-              label: 'Choisissez une région',
-              items: defaultRegions.keys.toList(),
+              label: 'District',
+              items: _districts,
               icon: Icons.map,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedRegion = newValue;
-                });
+              onChanged: (String? newValue) async {
+                _selectedDistrict = newValue;
+                _selectedRegion = null;
+
+                getRegionsForDistrict(newValue!);
+
+                setState(() {});
               },
+              selectedValue: _selectedDistrict,
             ),
             const SizedBox(
               height: 20,
             ),
             MySelectField(
+              label: 'Choisissez une région',
+              items: _regions,
+              icon: Icons.map,
+              onChanged: (String? newValue) {
+                _selectedRegion = newValue;
+
+                getCitiesForRegion(newValue!);
+
+                setState(() {});
+              },
+              selectedValue: _selectedRegion,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // MySelectField(
+            //   label: 'Choisissez une ville',
+            //   items: _cities,
+            //   icon: Icons.map,
+            //   onChanged: (String? newValue) {
+            //     _selectedCity = newValue;
+            //     setState(() {});
+            //   },
+            //   selectedValue: _selectedCity,
+            // ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
+            MySelectField(
               label: 'Choisissez une spécialité',
-              items: defaultSpecialities,
+              items: _specialities,
               icon: Icons.medical_services,
               onChanged: (String? newValue) {
                 setState(() {
@@ -89,17 +215,41 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
             const SizedBox(
               height: 20,
             ),
-            MyTextField(
-              controller: _promotionController,
-              obscureText: false,
-              labelText: "Choisissez la promotion",
-              validator: (value) => validateNumber(value, "La promotion"),
-              isHidden: false,
-              autoCorrect: false,
-              keyboardType: TextInputType.number,
-              textCapitalization: TextCapitalization.none,
+            MySelectField(
+              label: 'Choisissez une université',
+              items: defaultUniversities,
               icon: Icons.school,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedUniversity = newValue;
+                });
+              },
             ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            MySelectField(
+              label: 'Choisissez une promotion',
+              items: _promotions,
+              icon: Icons.school,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedPromotion = newValue;
+                });
+              },
+            ),
+            // MyTextField(
+            //   controller: _promotionController,
+            //   obscureText: false,
+            //   labelText: "Choisissez la promotion",
+            //   validator: (value) => validateNumber(value, "La promotion"),
+            //   isHidden: false,
+            //   autoCorrect: false,
+            //   keyboardType: TextInputType.number,
+            //   textCapitalization: TextCapitalization.none,
+            //   icon: Icons.school,
+            // ),
             const SizedBox(
               height: 20,
             ),

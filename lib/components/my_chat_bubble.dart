@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 import 'package:nuncare_mobile_firebase/themes/theme_provider.dart';
+import 'package:nuncare_mobile_firebase/utils/convert_timestamp.dart';
 import 'package:provider/provider.dart';
 
 class MyChatBubble extends StatelessWidget {
@@ -10,10 +12,12 @@ class MyChatBubble extends StatelessWidget {
     required this.isCurrentUser,
     required this.messageId,
     required this.userId,
+    required this.messageTime,
   });
 
   final bool isCurrentUser;
   final String message, messageId, userId;
+  final Timestamp messageTime;
 
   void _showOptions(BuildContext context, String messageId, String userId) {
     showModalBottomSheet(
@@ -137,6 +141,8 @@ class MyChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedTime = convertTimestamp(messageTime);
+
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
 
@@ -147,20 +153,36 @@ class MyChatBubble extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(4),
           color: isCurrentUser
               ? Theme.of(context).colorScheme.secondary
               : Theme.of(context).colorScheme.tertiary,
         ),
-        child: Text(
-          message,
-          style: TextStyle(
-            color: isCurrentUser ? Colors.white : Colors.black,
-            fontWeight: FontWeight.w300,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message,
+              style: TextStyle(
+                color: isCurrentUser ? Colors.white : Colors.black,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              formattedTime,
+              style: TextStyle(
+                fontSize: 8,
+                color: isCurrentUser ? Colors.white : Colors.black,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
         ),
       ),
     );

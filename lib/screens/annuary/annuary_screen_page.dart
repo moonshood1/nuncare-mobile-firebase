@@ -74,9 +74,13 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
   }
 
   void _searchDoctorsWithParametersFromStore(
+    String district,
     String region,
+    String city,
     String speciality,
     String promotion,
+    String university,
+    String gender,
   ) async {
     try {
       setState(() {
@@ -85,9 +89,13 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
 
       List<Doctor> response =
           await _resourceService.searchDoctorsWithParameters(
-        region.trim(),
-        speciality.trim(),
+        district,
+        region,
+        city,
+        speciality,
         promotion,
+        university,
+        gender,
       );
 
       setState(() {
@@ -120,16 +128,22 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
     final result = await showModalBottomSheet(
       useSafeArea: true,
       context: context,
-      isScrollControlled: false,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       builder: (ctx) => const CustomAnnuaryScreenPage(),
     );
 
+    print("resulat du pop : $result");
+
     if (result != null) {
       _searchDoctorsWithParametersFromStore(
-        result["region"],
-        result['speciality'],
-        result['promotion'].toString(),
+        result['district'] ?? '',
+        result["region"] ?? '',
+        result["city"] ?? '',
+        result['speciality'] ?? '',
+        result['promotion'] ?? '',
+        result["university"] ?? '',
+        result["gender"] ?? '',
       );
     }
   }
@@ -186,7 +200,8 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
         children: [
           ...doctors.map(
             (doctor) => Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
               child: MyUserCard(doctor: doctor),
             ),
           )

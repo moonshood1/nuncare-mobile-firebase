@@ -233,6 +233,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           height: 40,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Expanded(
               child: Text("Mes informations"),
@@ -266,7 +267,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         ),
         MyInfoTile(
           text: currentUser.university,
-          title: "Université de formation",
+          title: "Université",
         ),
         MyInfoTile(
           text: currentUser.promotion,

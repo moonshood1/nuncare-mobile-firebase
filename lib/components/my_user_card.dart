@@ -34,56 +34,66 @@ class MyUserCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        doctor.img,
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            doctor.img,
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                      fit: BoxFit.fill,
                     ),
-                  ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text("${doctor.firstName} ${doctor.lastName}"),
+                  ],
                 ),
                 const SizedBox(
-                  width: 10,
+                  height: 5,
                 ),
-                Text("${doctor.firstName} ${doctor.lastName}"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      doctor.speciality,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      doctor.address,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
-            const SizedBox(
-              height: 5,
+            Icon(
+              Icons.arrow_forward,
+              color: Colors.grey.shade500,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  doctor.speciality,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  doctor.address,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

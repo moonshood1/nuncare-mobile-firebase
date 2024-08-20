@@ -192,7 +192,7 @@ class PolicyScreenPage extends StatelessWidget {
                 height: 50,
               ),
               Text(
-                "CONDITIONS D'UTILISATION DE NUNCARE",
+                "POLITIQUE D'UTILISATION DE NUNCARE",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(

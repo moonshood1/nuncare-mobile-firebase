@@ -30,7 +30,7 @@ class _ArticlePageScreenState extends State<ArticlePageScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 5,
+          horizontal: 20,
           vertical: 10,
         ),
         child: SingleChildScrollView(

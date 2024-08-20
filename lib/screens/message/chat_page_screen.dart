@@ -136,6 +136,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             isCurrentUser: isCurrentUser,
             messageId: doc.id,
             userId: data['senderId'],
+            messageTime: data['timestamp'],
           )
         ],
       ),

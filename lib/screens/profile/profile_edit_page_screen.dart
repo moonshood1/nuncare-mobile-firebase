@@ -110,14 +110,13 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _phoneController.text = widget.doctor.phone;
     // _selectedRegion = widget.doctor.region;
     // _selectedCity = widget.doctor.city;
-    // _selectedDistrict = widget.doctor.district;
+    _selectedDistrict = widget.doctor.district;
     _selectedSpeciality = widget.doctor.speciality;
     _hospitalController.text = widget.doctor.hospital;
-    _hospitalController.text = widget.doctor.university;
     _orderNumberController.text = widget.doctor.orderNumber;
     _yearsController.text = widget.doctor.years.toString();
     _promotionController.text = widget.doctor.promotion;
-
+    _selectedUniversity = widget.doctor.university;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDistricts();
@@ -181,13 +180,13 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
         'phone': _phoneController.text.trim(),
         'hospital': _hospitalController.text.trim(),
         'bio': _bioController.text.trim(),
-        'university': _selectedUniversity!.trim(),
+        'university': _selectedUniversity?.trim() ?? '',
         'orderNumber': _orderNumberController.text.trim(),
         'promotion': _promotionController.text.trim(),
         'years': _yearsController.text.trim(),
-        'district': _selectedDistrict!.trim(),
-        'region': _selectedRegion!.trim(),
-        'city': _selectedCity!.trim(),
+        'district': _selectedDistrict?.trim() ?? '',
+        'region': _selectedRegion?.trim() ?? '',
+        'city': _selectedCity?.trim() ?? '',
         'speciality': _selectedSpeciality!.trim(),
       };
       BasicResponse response =

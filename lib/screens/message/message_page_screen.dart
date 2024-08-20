@@ -57,6 +57,7 @@ class _MessagePageScreenState extends State<MessagePageScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: MyLoadingCirle(),
+            // child: MyWaveCircleLoading(),
           );
         }
 

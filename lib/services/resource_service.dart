@@ -596,12 +596,16 @@ class ResourceService {
   }
 
   Future<List<Doctor>> searchDoctorsWithParameters(
+    String district,
     String region,
+    String city,
     String speciality,
     String promotion,
+    String university,
+    String gender,
   ) async {
     final url = Uri.parse(
-      "$resourcesUri/doctors-custom-search?region=$region&speciality=$speciality&promotion=$promotion",
+      "$resourcesUri/doctors-custom-search",
     );
 
     final token = await _auth.currentUser?.getIdToken();
@@ -610,12 +614,23 @@ class ResourceService {
       throw Exception('Token non disponible');
     }
 
-    final response = await http.get(
+    final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
+      body: jsonEncode(
+        {
+          'district': district,
+          "region": region,
+          "city": city,
+          "speciality": speciality,
+          "promotion": promotion,
+          "university": university,
+          "gender": gender,
+        },
+      ),
     );
 
     if (response.statusCode == 200) {
@@ -682,6 +697,30 @@ class ResourceService {
           responseData['districts'].cast<String>();
 
       return districtsData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getPromotions() async {
+    final url = Uri.parse(
+      "$resourcesUri/promotions",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> promotionsData =
+          responseData['promotions'].cast<String>();
+
+      return promotionsData;
     } else {
       return [];
     }

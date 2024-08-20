@@ -46,6 +46,7 @@ class _LocationPageInfosState extends State<LocationPageInfos>
 
       setState(() {
         _districts = response;
+        _isDistrictSelected = true;
       });
     } catch (error) {
       print(error);
@@ -58,7 +59,7 @@ class _LocationPageInfosState extends State<LocationPageInfos>
           await _resourceService.getRegionsForSelectedDistrict(district);
 
       setState(() {
-        _isDistrictSelected = true;
+        _isRegionSelected = true;
         _regions = response;
       });
     } catch (error) {
@@ -72,7 +73,6 @@ class _LocationPageInfosState extends State<LocationPageInfos>
           await _resourceService.getCitiesForSelectedRegion(region);
 
       setState(() {
-        _isRegionSelected = true;
         _cities = response;
       });
     } catch (error) {

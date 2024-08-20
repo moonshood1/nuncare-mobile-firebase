@@ -81,6 +81,7 @@ class _ImageEditPageScreenState extends State<ImageEditPageScreen> {
         });
 
         Navigator.of(context).pop(true);
+        Navigator.of(context).pop();
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -215,6 +216,7 @@ class _ImageEditPageScreenState extends State<ImageEditPageScreen> {
                 height: 30,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
                     onPressed:
@@ -233,9 +235,9 @@ class _ImageEditPageScreenState extends State<ImageEditPageScreen> {
                       style: TextStyle(fontSize: 15),
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
+                  // const SizedBox(
+                  //   width: 20,
+                  // ),
                   ElevatedButton(
                     onPressed: _reinitValues,
                     style: ElevatedButton.styleFrom(
