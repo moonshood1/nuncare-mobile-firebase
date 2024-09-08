@@ -46,7 +46,7 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
     });
 
     Navigator.of(context).pop({
-      'district': _selectedDistrict,
+      'district': _selectedDistrict ?? '',
       'region': _selectedRegion,
       'city': _selectedCity,
       'speciality': _selectedSpeciality ?? '',
@@ -79,6 +79,19 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
       setState(() {
         _districts = response;
         _isDistrictSelected = true;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void getRegions() async {
+    try {
+      List<String> response = await _resourceService.getRegions();
+
+      setState(() {
+        _regions = response;
+        _isRegionSelected = true;
       });
     } catch (error) {
       print(error);
@@ -130,8 +143,9 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getSpecialities();
-      getDistricts();
+      // getDistricts();
       getPromotions();
+      getRegions();
     });
   }
 
@@ -156,23 +170,23 @@ class _CustomAnnuaryScreenPageState extends State<CustomAnnuaryScreenPage> {
             const SizedBox(
               height: 20,
             ),
-            MySelectField(
-              label: 'District',
-              items: _districts,
-              icon: Icons.map,
-              onChanged: (String? newValue) async {
-                _selectedDistrict = newValue;
-                _selectedRegion = null;
+            // MySelectField(
+            //   label: 'District',
+            //   items: _districts,
+            //   icon: Icons.map,
+            //   onChanged: (String? newValue) async {
+            //     _selectedDistrict = newValue;
+            //     _selectedRegion = null;
 
-                getRegionsForDistrict(newValue!);
+            //     getRegionsForDistrict(newValue!);
 
-                setState(() {});
-              },
-              selectedValue: _selectedDistrict,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+            //     setState(() {});
+            //   },
+            //   selectedValue: _selectedDistrict,
+            // ),
+            // const SizedBox(
+            //   height: 20,
+            // ),
             MySelectField(
               label: 'Choisissez une région',
               items: _regions,

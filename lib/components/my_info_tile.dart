@@ -5,6 +5,27 @@ class MyInfoTile extends StatelessWidget {
 
   final String text, title;
 
+  void showTileInfo(BuildContext context, String title, String text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 20,
+          ),
+        ),
+        content: Text(
+          text,
+          style: const TextStyle(
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,15 +35,28 @@ class MyInfoTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
               ),
-              Text(
-                text != "" ? text : "-",
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => showTileInfo(context, title, text),
+                  child: Text(
+                    text != "" ? text : "-",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
               ),
             ],
           ),

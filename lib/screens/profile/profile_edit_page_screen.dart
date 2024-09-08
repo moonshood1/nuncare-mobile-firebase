@@ -44,8 +44,21 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
   List<String> _districts = [];
   List<String> _regions = [];
   List<String> _cities = [];
+  List<String> _specialities = [];
 
   var _isLoading = false;
+
+  void getSpecialities() async {
+    try {
+      List<String> response = await _resourceService.getSpecialities();
+
+      setState(() {
+        _specialities = response;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
 
   void getDistricts() async {
     try {
@@ -117,8 +130,10 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _yearsController.text = widget.doctor.years.toString();
     _promotionController.text = widget.doctor.promotion;
     _selectedUniversity = widget.doctor.university;
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getSpecialities();
       getDistricts();
     });
   }
@@ -187,7 +202,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
         'district': _selectedDistrict?.trim() ?? '',
         'region': _selectedRegion?.trim() ?? '',
         'city': _selectedCity?.trim() ?? '',
-        'speciality': _selectedSpeciality!.trim(),
+        'speciality': _selectedSpeciality?.trim() ?? '',
       };
       BasicResponse response =
           await _userService.updateBulkInformations(userData);
@@ -349,7 +364,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
             ),
             MySelectField(
               label: 'Votre spécialité',
-              items: defaultSpecialities,
+              items: _specialities,
               icon: Icons.medical_services,
               onChanged: (String? newValue) {
                 setState(() {

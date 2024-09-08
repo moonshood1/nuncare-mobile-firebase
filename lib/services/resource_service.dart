@@ -5,6 +5,7 @@ import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/constants/uris.dart';
 import 'package:nuncare_mobile_firebase/models/ad_model.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
+import 'package:nuncare_mobile_firebase/models/comment_model.dart';
 import 'package:nuncare_mobile_firebase/models/hospital_model.dart';
 import 'package:nuncare_mobile_firebase/models/info_model.dart';
 import 'package:nuncare_mobile_firebase/constants/base_url.dart';
@@ -137,6 +138,35 @@ class ResourceService {
             articlesData.map((data) => Article.fromJson(data)).toList();
 
         return articles;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw Exception('Erreur lors de la récupération des articles : $error');
+    }
+  }
+
+  Future<List<Comment>> getArticleComments(String articleId) async {
+    try {
+      print("ENVOI DE LA FONCTION DES COMMENTAIRES :");
+      final url = Uri.parse("$resourcesUri/articles-comments?id=$articleId");
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        final List<dynamic> commentsData = responseData['comments'] ?? [];
+
+        final List<Comment> comments =
+            commentsData.map((data) => Comment.fromJson(data)).toList();
+
+        return comments;
       } else {
         return [];
       }
@@ -697,6 +727,29 @@ class ResourceService {
           responseData['districts'].cast<String>();
 
       return districtsData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getRegions() async {
+    final url = Uri.parse(
+      "$resourcesUri/regions",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> regionsData = responseData['regions'].cast<String>();
+
+      return regionsData;
     } else {
       return [];
     }

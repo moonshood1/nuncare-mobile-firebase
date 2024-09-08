@@ -1,5 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:nuncare_mobile_firebase/db/ad_hive.dart';
+import 'package:nuncare_mobile_firebase/db/article_hive.dart';
+import 'package:nuncare_mobile_firebase/db/medecine_hive.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nuncare_mobile_firebase/services/notification_service.dart';
@@ -13,6 +17,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(ArticleHiveAdapter());
+  Hive.registerAdapter(AdAdapter());
+  Hive.registerAdapter(MedecineHiveAdapter());
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 

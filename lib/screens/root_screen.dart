@@ -37,9 +37,9 @@ class _RootPageScreenState extends State<RootPageScreen> {
       case 3:
         screenWidget = const ProfilePageScreen();
         break;
-      case 4:
-        screenWidget = const TestPageScreen();
-        break;
+      // case 4:
+      //   screenWidget = const TestPageScreen();
+      //   break;
     }
 
     return Scaffold(
@@ -81,15 +81,15 @@ class _RootPageScreenState extends State<RootPageScreen> {
             label: "Profil",
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.door_back_door),
-            // icon: Image.asset(
-            //   'assets/icons/utilisateur.png',
-            //   width: 35,
-            // ),
-            label: "Test",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: const Icon(Icons.door_back_door),
+          //   // icon: Image.asset(
+          //   //   'assets/icons/utilisateur.png',
+          //   //   width: 35,
+          //   // ),
+          //   label: "Test",
+          //   backgroundColor: Theme.of(context).colorScheme.primary,
+          // ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

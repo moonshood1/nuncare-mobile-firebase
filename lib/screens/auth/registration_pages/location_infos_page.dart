@@ -80,11 +80,25 @@ class _LocationPageInfosState extends State<LocationPageInfos>
     }
   }
 
+  void getRegions() async {
+    try {
+      List<String> response = await _resourceService.getRegions();
+
+      setState(() {
+        _regions = response;
+        _isRegionSelected = true;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getDistricts();
+      // getDistricts();
+      getRegions();
     });
   }
 
@@ -99,22 +113,22 @@ class _LocationPageInfosState extends State<LocationPageInfos>
             const SizedBox(
               height: 30,
             ),
-            MySelectField(
-              label: 'District',
-              items: _districts,
-              icon: Icons.map,
-              onChanged: (String? newValue) async {
-                widget.onChangeDistrict(newValue!);
-                widget.selectedDistrict = newValue;
-                widget.selectedRegion = null;
-                widget.onChangeRegion(null);
+            // MySelectField(
+            //   label: 'District',
+            //   items: _districts,
+            //   icon: Icons.map,
+            //   onChanged: (String? newValue) async {
+            //     widget.onChangeDistrict(newValue!);
+            //     widget.selectedDistrict = newValue;
+            //     widget.selectedRegion = null;
+            //     widget.onChangeRegion(null);
 
-                getRegionsForDistrict(newValue);
+            //     getRegionsForDistrict(newValue);
 
-                setState(() {});
-              },
-              selectedValue: widget.selectedDistrict,
-            ),
+            //     setState(() {});
+            //   },
+            //   selectedValue: widget.selectedDistrict,
+            // ),
 
             // if (_isDistrictSelected)
             Column(

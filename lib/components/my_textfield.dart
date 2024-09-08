@@ -15,6 +15,8 @@ class MyTextField extends StatefulWidget {
     required this.icon,
     this.focusNode,
     this.inputFormatter,
+    this.maxLines,
+    this.minLines,
   });
 
   final TextEditingController controller;
@@ -26,6 +28,8 @@ class MyTextField extends StatefulWidget {
   final IconData icon;
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatter;
+  final int? maxLines;
+  final int? minLines;
 
   @override
   State<MyTextField> createState() => _MyTextFieldState();
@@ -51,6 +55,8 @@ class _MyTextFieldState extends State<MyTextField> {
       autocorrect: widget.autoCorrect,
       textCapitalization: widget.textCapitalization,
       inputFormatters: widget.inputFormatter,
+      maxLines: widget.maxLines,
+      minLines: widget.minLines,
       onChanged: (value) => setState(() {
         _errorText = widget.validator(value);
       }),

@@ -159,7 +159,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                 return null;
               },
               autoCorrect: true,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
               icon: Icons.message,
               textCapitalization: TextCapitalization.none,
             ),

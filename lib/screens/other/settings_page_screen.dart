@@ -102,6 +102,26 @@ class SettingsPageScreen extends StatelessWidget {
                 ),
               ),
             ),
+            MySettingsListTile(
+              title: 'Masquer mes informations',
+              color: Colors.grey.shade200,
+              textColor: Colors.grey.shade600,
+              action: IconButton(
+                // onPressed: () {
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (ctx) => BlockedUsersPageScreen(),
+                //     ),
+                //   );
+                // },
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ),
             // MySettingsListTile(
             //   title: 'Fermer le compte',
             //   color: Colors.red.shade400,

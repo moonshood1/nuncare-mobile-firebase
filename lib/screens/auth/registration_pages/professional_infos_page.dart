@@ -4,7 +4,6 @@ import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/constants/default_values.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 import 'package:nuncare_mobile_firebase/validators/number_validator.dart';
-import 'package:multi_dropdown/multi_dropdown.dart';
 
 class ProfessionnalPageInfos extends StatefulWidget {
   ProfessionnalPageInfos({

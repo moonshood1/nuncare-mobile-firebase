@@ -138,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   autoCorrect: false,
                   keyboardType: TextInputType.text,
                   textCapitalization: TextCapitalization.none,
+                  maxLines: 1,
                 ),
                 const SizedBox(
                   height: 15,

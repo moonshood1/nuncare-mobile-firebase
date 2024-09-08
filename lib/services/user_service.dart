@@ -386,9 +386,9 @@ class UserService {
     }
   }
 
-  Future<void> interractWithArticle(String articleId) async {
+  Future<void> likeArticle(String articleId) async {
     try {
-      final url = Uri.parse("$usersUri/article-interract");
+      final url = Uri.parse("$usersUri/article-like");
 
       final token = await _auth.currentUser?.getIdToken();
 
@@ -419,9 +419,37 @@ class UserService {
     }
   }
 
-  // METHODE CHATS
+  Future<void> commentArticle(String articleId, String comment) async {
+    try {
+      final url = Uri.parse("$usersUri/article-comment");
 
-  // Future<bool> checkChatExists(String uid1,String uid2) async {
-  //   String chatID =
-  // }
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'id': articleId,
+            'comment': comment,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        return;
+      }
+    } catch (e) {
+      throw Exception("Erreur lors de l'enregistrement du commentaire : $e");
+    }
+  }
 }

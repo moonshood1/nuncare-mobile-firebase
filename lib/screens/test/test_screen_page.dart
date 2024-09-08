@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet.dart';
+import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet_field.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_selectfield.dart';
@@ -8,6 +12,8 @@ import 'package:nuncare_mobile_firebase/screens/message/chat_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/chat_service.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
+import 'package:nuncare_mobile_firebase/utils/convert_to_dropdown_items.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class TestPageScreen extends StatefulWidget {
   const TestPageScreen({super.key});
@@ -17,61 +23,18 @@ class TestPageScreen extends StatefulWidget {
 }
 
 class _TestPageScreenState extends State<TestPageScreen> {
-  final ChatService _chatService = ChatService();
-  final AuthService _authService = AuthService();
   final ResourceService _resourceService = ResourceService();
 
-  String? _selectedDistrict;
-  String? _selectedRegion;
-  String? _selectedCity;
+  List<String> _specialities = [];
+  List<String> _selectedSpecialities = [];
 
-  bool _isDistrictSelected = false;
-  bool _isRegionSelected = false;
-
-  List<String> _districts = [];
-  List<String> _regions = [];
-  List<String> _cities = [];
-
-  void getDistricts() async {
+  void getSpecialities() async {
     try {
-      List<String> response = await _resourceService.getDistricts();
+      List<String> response = await _resourceService.getSpecialities();
 
       setState(() {
-        _districts = response;
-        _isDistrictSelected = true;
+        _specialities = response;
       });
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  void getRegionsForDistrict(String district) async {
-    try {
-      List<String> response =
-          await _resourceService.getRegionsForSelectedDistrict(district);
-
-      setState(() {
-        _isDistrictSelected = true;
-        _regions = response;
-      });
-
-      print('Les regions disponibles pour $district : $response');
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  void getCitiesForRegion(String region) async {
-    try {
-      List<String> response =
-          await _resourceService.getCitiesForSelectedRegion(region);
-
-      setState(() {
-        _isRegionSelected = true;
-        _cities = response;
-      });
-
-      print('Les villes disponibles pour $region : $response');
     } catch (error) {
       print(error);
     }
@@ -81,8 +44,12 @@ class _TestPageScreenState extends State<TestPageScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getDistricts();
+      getSpecialities();
     });
+  }
+
+  void checkValues() {
+    print('speeeee : $_selectedSpecialities');
   }
 
   @override
@@ -98,53 +65,26 @@ class _TestPageScreenState extends State<TestPageScreen> {
       drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            MySelectField(
-              label: 'District',
-              items: _districts,
-              icon: Icons.map,
-              onChanged: (String? newValue) async {
-                _selectedDistrict = newValue;
-                _selectedRegion = null;
-
-                getRegionsForDistrict(newValue!);
-
-                setState(() {});
-              },
-              selectedValue: _selectedDistrict,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            MySelectField(
-              label: 'Région',
-              items: _regions,
-              icon: Icons.location_city,
-              onChanged: (String? newValue) {
-                _selectedRegion = newValue;
-
-                getCitiesForRegion(newValue!);
-
-                setState(() {});
-              },
-              selectedValue: _selectedRegion,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // MySelectField(
-            //   label: 'Choisissez une ville',
-            //   items: _cities,
-            //   icon: Icons.map,
-            //   onChanged: (String? newValue) {
-            //     _selectedCity = newValue;
-
-            //     setState(() {});
-            //   },
-            //   selectedValue: _selectedCity,
-            // ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MultiSelectDialogField<String>(
+                title: Text("Spécialités"),
+                buttonText: Text("Spécialités"),
+                confirmText: Text("Valider"),
+                cancelText: Text("Annuler"),
+                items: _specialities.map((e) => MultiSelectItem(e, e)).toList(),
+                listType: MultiSelectListType.CHIP,
+                onConfirm: (values) {
+                  _selectedSpecialities = values;
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextButton(onPressed: checkValues, child: Text("Tester"))
+            ],
+          ),
         ),
       ),
     );
