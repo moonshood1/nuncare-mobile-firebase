@@ -174,13 +174,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         "firstName": _firstnameController.text.trim(),
         "lastName": _lastnameController.text.trim(),
         "sex": _selectedGender,
-        "speciality": _selectedSpeciality!,
+        "speciality": _selectedSpeciality ?? '',
         "years": _yearsController.text.trim(),
         "phone": _phoneController.text.replaceAll(' ', ''),
         "orderNumber": _orderNumberController.text.trim(),
         "promotion": _promotionController.text.trim(),
-        "district": _selectedDistrict!,
-        // "region": _selectedRegion!,
+        // "district": _selectedDistrict!,
+        "region": _selectedRegion ?? '',
+        "city": _selectedCity ?? '',
         'password': _pwController.text.trim()
       };
 

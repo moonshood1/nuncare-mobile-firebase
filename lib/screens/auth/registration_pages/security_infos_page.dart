@@ -68,6 +68,7 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
               autoCorrect: false,
               keyboardType: TextInputType.text,
               textCapitalization: TextCapitalization.none,
+              maxLines: 1,
             ),
             const SizedBox(
               height: 20,
@@ -85,6 +86,7 @@ class _SecurityPageInfosState extends State<SecurityPageInfos> {
                 value,
                 widget.pwController.text,
               ),
+              maxLines: 1,
             ),
             const SizedBox(
               height: 20,
