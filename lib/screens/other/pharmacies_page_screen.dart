@@ -176,15 +176,15 @@ class _PharmaciesPageScreenState extends State<PharmaciesPageScreen> {
               size: 30,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              // _openCustomSearchModal(context);
-            },
-            icon: const Icon(
-              Icons.tune,
-              size: 30,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     _openCustomSearchModal(context);
+          //   },
+          //   icon: const Icon(
+          //     Icons.tune,
+          //     size: 30,
+          //   ),
+          // ),
         ],
       ),
       body: Padding(

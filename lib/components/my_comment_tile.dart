@@ -18,7 +18,7 @@ class MyCommentTile extends StatelessWidget {
     String formattedDate = DateFormat('dd-MM-yyyy - HH:mm').format(inputDate);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         decoration: BoxDecoration(
@@ -27,9 +27,9 @@ class MyCommentTile extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(0, 2),
+              spreadRadius: 0.2,
+              blurRadius: 0.5,
+              offset: const Offset(0, 0.5),
             ),
           ],
         ),

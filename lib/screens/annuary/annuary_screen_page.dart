@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_annuary_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
 import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_card.dart';
@@ -237,7 +238,7 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
           ),
         ],
       ),
-      drawer: MyDrawer(),
+      drawer: MyAnnuaryDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: SingleChildScrollView(

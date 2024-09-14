@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_default_navbar.dart';
 import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart';
 import 'package:nuncare_mobile_firebase/screens/home/home_page_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/message/message_page_screen.dart';
@@ -44,55 +45,9 @@ class _RootPageScreenState extends State<RootPageScreen> {
 
     return Scaffold(
       body: screenWidget,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        unselectedFontSize: 12,
-        selectedFontSize: 12,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: const Color.fromARGB(170, 0, 0, 0),
-        iconSize: 32,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: "Accueil",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.people),
-            label: "Annuaire",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.chat_bubble),
-            // icon: Image.asset(
-            //   'assets/icons/discuter.png',
-            //   width: 35,
-            // ),
-            label: "Messagerie",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
-            // icon: Image.asset(
-            //   'assets/icons/utilisateur.png',
-            //   width: 35,
-            // ),
-            label: "Profil",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          // BottomNavigationBarItem(
-          //   icon: const Icon(Icons.door_back_door),
-          //   // icon: Image.asset(
-          //   //   'assets/icons/utilisateur.png',
-          //   //   width: 35,
-          //   // ),
-          //   label: "Test",
-          //   backgroundColor: Theme.of(context).colorScheme.primary,
-          // ),
-        ],
+      bottomNavigationBar: MyDefaultNavbar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

@@ -18,8 +18,12 @@ class MyMedecineCard extends StatelessWidget {
         border: Border.all(color: Colors.black.withOpacity(0.1)),
         boxShadow: [
           BoxShadow(
-            blurRadius: 1,
-            offset: const Offset(0, 1),
+            spreadRadius: 0.2,
+            blurRadius: 0.5,
+            offset: const Offset(0, 0.5),
+
+            // blurRadius: 1,
+            // offset: const Offset(0, 1),
             color: Colors.black.withOpacity(0.25),
           ),
         ],

@@ -60,12 +60,12 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     }
   }
 
-  void getDistricts() async {
+  void getRegions() async {
     try {
-      List<String> response = await _resourceService.getDistricts();
+      List<String> response = await _resourceService.getRegions();
 
       setState(() {
-        _districts = response;
+        _regions = response;
       });
     } catch (error) {
       print(error);
@@ -121,9 +121,9 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     _lastNameController.text = widget.doctor.lastName;
     _bioController.text = widget.doctor.bio;
     _phoneController.text = widget.doctor.phone;
-    // _selectedRegion = widget.doctor.region;
+    _selectedRegion = widget.doctor.region;
     // _selectedCity = widget.doctor.city;
-    _selectedDistrict = widget.doctor.district;
+    // _selectedDistrict = widget.doctor.district;
     _selectedSpeciality = widget.doctor.speciality;
     _hospitalController.text = widget.doctor.hospital;
     _orderNumberController.text = widget.doctor.orderNumber;
@@ -134,7 +134,7 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getSpecialities();
-      getDistricts();
+      getRegions();
     });
   }
 
@@ -469,18 +469,18 @@ class _ProfileEditPageScreenState extends State<ProfileEditPageScreen> {
             const SizedBox(
               height: 30,
             ),
-            MySelectField(
-              label: 'Votre District',
-              items: _districts,
-              icon: Icons.map,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedDistrict = newValue;
-                  getRegionsForDistrict(newValue!);
-                });
-              },
-              selectedValue: _selectedDistrict,
-            ),
+            // MySelectField(
+            //   label: 'Votre District',
+            //   items: _districts,
+            //   icon: Icons.map,
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       _selectedDistrict = newValue;
+            //       getRegionsForDistrict(newValue!);
+            //     });
+            //   },
+            //   selectedValue: _selectedDistrict,
+            // ),
             const SizedBox(
               height: 20,
             ),
