@@ -8,6 +8,7 @@ import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/cloudinary_service.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
 import 'package:nuncare_mobile_firebase/validators/long_text_validator.dart';
+import 'package:nuncare_mobile_firebase/validators/name_validator.dart';
 
 class ArticleEditPageScreen extends StatefulWidget {
   const ArticleEditPageScreen({super.key});
@@ -23,6 +24,9 @@ class _ArticleEditPageScreenState extends State<ArticleEditPageScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _externalLinkController = TextEditingController();
+  final TextEditingController _externalLinkTitleController =
+      TextEditingController();
 
   File? _selectedImage;
   var _isLoading = false;
@@ -58,6 +62,8 @@ class _ArticleEditPageScreenState extends State<ArticleEditPageScreen> {
         _descriptionController.text,
         _contentController.text,
         imgUrl,
+        _externalLinkController.text.trim(),
+        _externalLinkTitleController.text.trim(),
       );
 
       if (!context.mounted) {
@@ -230,6 +236,36 @@ class _ArticleEditPageScreenState extends State<ArticleEditPageScreen> {
                 icon: Icons.content_copy,
                 maxLines: null,
                 minLines: 1,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              MyTextField(
+                controller: _externalLinkController,
+                obscureText: false,
+                labelText: "Lien vers l'article",
+                validator: (value) =>
+                    validateName(value, "Le lien vers l'article"),
+                isHidden: false,
+                autoCorrect: false,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.none,
+                icon: Icons.link,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              MyTextField(
+                controller: _externalLinkTitleController,
+                obscureText: false,
+                labelText: "Titre du lien vers l'article",
+                validator: (value) =>
+                    validateName(value, "le titre du lien vers l'article"),
+                isHidden: false,
+                autoCorrect: false,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.none,
+                icon: Icons.link,
               ),
               const SizedBox(
                 height: 30,

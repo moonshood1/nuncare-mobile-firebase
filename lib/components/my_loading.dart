@@ -27,6 +27,20 @@ class MyWaveCircleLoading extends StatelessWidget {
   }
 }
 
+class MyFadingCircleLoading extends StatelessWidget {
+  const MyFadingCircleLoading({super.key, this.customSize = 45});
+
+  final double? customSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return SpinKitFadingCircle(
+      size: customSize!,
+      color: Theme.of(context).colorScheme.primary,
+    );
+  }
+}
+
 void myLoadingDialog(BuildContext context) {
   showDialog(
     context: context,

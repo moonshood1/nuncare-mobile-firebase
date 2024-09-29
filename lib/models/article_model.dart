@@ -12,9 +12,11 @@ class Article {
     required this.isDraft,
     required this.isPublished,
     required this.isActive,
+    this.externalLink,
+    this.externalLinkTitle,
   });
 
-  String? id, authorId;
+  String? id, authorId, externalLink, externalLinkTitle;
   String img, title, description, content, authorName, createdAt;
   List<dynamic>? likes;
   bool isDraft, isPublished, isActive;
@@ -33,6 +35,8 @@ class Article {
       isDraft: json['isDraft'],
       isPublished: json['isPublished'],
       isActive: json['isActive'],
+      externalLink: json["externalLink"],
+      externalLinkTitle: json['externalLinkTitle'],
     );
   }
 

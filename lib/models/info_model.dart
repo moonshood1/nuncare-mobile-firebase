@@ -2,26 +2,30 @@ class Info {
   Info({
     this.id,
     required this.title,
+    required this.message,
     required this.img,
-    required this.text,
+    required this.isActive,
   });
 
   String? id;
-  String title, img, text;
+  String title, img, message;
+  bool isActive;
 
   factory Info.fromJson(Map<String, dynamic> json) {
     return Info(
       title: json['title'],
+      message: json['message'],
       img: json['img'],
-      text: json['text'],
+      isActive: json['isActive'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'img': img,
       'title': title,
-      'text': text,
+      'message': message,
+      'img': img,
+      'isActive': isActive,
     };
   }
 }

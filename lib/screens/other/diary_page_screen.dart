@@ -41,31 +41,6 @@ class _DiaryScreenPageState extends State<DiaryScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget articleWidget = const Center(
-      child: Text(
-        "Aucun article ajouté",
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-      ),
-    );
-
-    if (_isLoading && articles.isEmpty) {
-      articleWidget = const Center(
-        child: MyLoadingCirle(),
-      );
-    }
-
-    if (articles.isNotEmpty) {
-      articleWidget = ListView.builder(
-        itemCount: articles.length,
-        itemBuilder: (BuildContext ctx, int index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MyArticleRow(
-            article: articles[index],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -82,7 +57,34 @@ class _DiaryScreenPageState extends State<DiaryScreenPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: articleWidget,
+        child: _buildView(),
+      ),
+    );
+  }
+
+  Widget _buildView() {
+    if (_isLoading) {
+      return const Center(
+        child: MyFadingCircleLoading(),
+      );
+    }
+
+    if (articles.isEmpty) {
+      return const Center(
+        child: Text(
+          "Aucun article ajouté",
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: articles.length,
+      itemBuilder: (BuildContext ctx, int index) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: MyArticleRow(
+          article: articles[index],
+        ),
       ),
     );
   }

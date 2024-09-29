@@ -73,7 +73,9 @@ class MyAccountDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => const SettingsPageScreen(),
+                      builder: (ctx) => SettingsPageScreen(
+                        doctor: doctor,
+                      ),
                     ),
                   );
                 },

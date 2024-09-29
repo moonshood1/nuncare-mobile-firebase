@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_annuary_drawer.dart';
-import 'package:nuncare_mobile_firebase/components/my_drawer.dart';
-import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
+import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_user_card.dart';
 import 'package:nuncare_mobile_firebase/models/user_model.dart';
 import 'package:nuncare_mobile_firebase/screens/annuary/custom_annuary_screen_search_page.dart';
 import 'package:nuncare_mobile_firebase/screens/annuary/location_screen_page.dart';
+import 'package:nuncare_mobile_firebase/screens/profile/kyc_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
+import 'package:nuncare_mobile_firebase/services/user_service.dart';
 
 class AnnuaryPageScreen extends StatefulWidget {
   const AnnuaryPageScreen({super.key});
@@ -18,9 +19,29 @@ class AnnuaryPageScreen extends StatefulWidget {
 class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
   final ResourceService _resourceService = ResourceService();
   final TextEditingController _searchTextController = TextEditingController();
+  final UserService _userService = UserService();
+
+  Doctor currentUser = Doctor.defaultDoctor();
 
   List<Doctor> doctors = [];
   var _isLoading = false;
+
+  void getInformationsFromStore() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Doctor response = await _userService.getInformations();
+
+      setState(() {
+        currentUser = response;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void getDoctorsFromStore() async {
     try {
@@ -151,65 +172,13 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
 
   @override
   void initState() {
+    getInformationsFromStore();
     getDoctorsFromStore();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget doctorWidget = Center(
-      child: Column(
-        children: [
-          const Text(
-            "Aucun docteur dans l'annuaire",
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextButton(
-            onPressed: getDoctorsFromStore,
-            child: const Text(
-              "Actualiser la liste",
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-
-    if (_isLoading == true && doctors.isEmpty) {
-      doctorWidget = const Column(
-        children: [
-          MyDoctorCardSkeleton(),
-          SizedBox(height: 10),
-          MyDoctorCardSkeleton(),
-          SizedBox(height: 10),
-          MyDoctorCardSkeleton(),
-          SizedBox(height: 10),
-          MyDoctorCardSkeleton(),
-          SizedBox(height: 10),
-          MyDoctorCardSkeleton(),
-        ],
-      );
-    }
-
-    if (doctors.isNotEmpty) {
-      doctorWidget = Column(
-        children: [
-          ...doctors.map(
-            (doctor) => Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
-              child: MyUserCard(doctor: doctor),
-            ),
-          )
-        ],
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -241,94 +210,150 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
       drawer: MyAnnuaryDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Tous les medecins de Nuncare',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Tous les medecins de Nuncare',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
-              const SizedBox(
-                height: 20,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Retrouvez tous les medecins inscrits sur la plateforme en recherchant par nom dans la barre de recherche",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
               ),
-              const Text(
-                "Retrouvez tous les medecins inscrits sur la plateforme en recherchant par nom dans la barre de recherche",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      controller: _searchTextController,
-                      decoration: InputDecoration(
-                        hintStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        hintText: "Entrez le nom d'un médecin",
-                        suffixIcon: InkWell(
-                          onTap: _searchDoctorsFromStore,
-                          child: const Icon(
-                            Icons.search,
-                          ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: TextField(
+                    controller: _searchTextController,
+                    decoration: InputDecoration(
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      hintText: "Entrez le nom d'un médecin",
+                      suffixIcon: InkWell(
+                        onTap: _searchDoctorsFromStore,
+                        child: const Icon(
+                          Icons.search,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Text(
-                'Les medecins de Nuncare',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Les derniers medecins inscrits sur la plateforme',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              doctorWidget
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: _buildView(),
+            )
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildView() {
+    if (_isLoading == true) {
+      return const Center(
+        child: MyFadingCircleLoading(),
+      );
+    }
+
+    if (!_isLoading && !currentUser.isActive) {
+      return Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              textAlign: TextAlign.center,
+              'Annuaire indisponible pour le moment, votre identification est requise',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const KycPageScreen(),
+                  ),
+                );
+              },
+              child: const Text(
+                'Verifier le profil',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    if (doctors.isEmpty) {
+      return Center(
+        child: Column(
+          children: [
+            const Text(
+              "Aucun docteur dans l'annuaire",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: getDoctorsFromStore,
+              child: const Text(
+                "Actualiser la liste",
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: doctors.length,
+      itemBuilder: (ctx, index) {
+        var doctor = doctors[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2.5),
+          child: GestureDetector(
+            onLongPress: () => print('Doctor : ${doctor.firebaseId}'),
+            child: MyUserCard(doctor: doctor),
+          ),
+        );
+      },
+    );
+  }
 }
-
-
-
-
-      // ListView.builder(
-      //   itemCount: doctors.length,
-      //   itemBuilder: (BuildContext ctx, int index) => Padding(
-      //     padding: const EdgeInsets.all(8.0),
-      //     child: MyUserCard(
-      //       doctor: doctors[index],
-      //     ),
-      //   ),
-      // );

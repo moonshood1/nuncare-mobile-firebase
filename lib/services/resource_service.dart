@@ -300,6 +300,48 @@ class ResourceService {
     }
   }
 
+  Future<List<Pharmacy>> searchPharmaciesWithParameters(
+    String section,
+    String area,
+  ) async {
+    final url = Uri.parse(
+      "$resourcesUri/pharmacies-custom-search",
+    );
+
+    final token = await _auth.currentUser?.getIdToken();
+
+    if (token == null) {
+      throw Exception('Token non disponible');
+    }
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(
+        {
+          'section': section,
+          "area": area,
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<dynamic> pharmaciesData = responseData['pharmacies'] ?? [];
+
+      final List<Pharmacy> pharmacies =
+          pharmaciesData.map((data) => Pharmacy.fromJson(data)).toList();
+
+      return pharmacies;
+    } else {
+      return [];
+    }
+  }
+
   Future<List<Pharmacy>> localizePharmacies(String lat, String lng) async {
     try {
       final url =
@@ -820,6 +862,71 @@ class ResourceService {
       final List<String> citiesData = responseData['cities'].cast<String>();
 
       return citiesData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getSections() async {
+    final url = Uri.parse(
+      "$resourcesUri/sections",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> sectionsData = responseData['sections'].cast<String>();
+
+      return sectionsData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getAreaForSelectedSection(String section) async {
+    final url = Uri.parse(
+      "$resourcesUri/areas-search?sectionName=$section",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> areasData = responseData['areas'].cast<String>();
+
+      return areasData;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String>> getKycDocuments() async {
+    final url = Uri.parse("$resourcesUri/kyc-documents");
+
+    final response = await http.get(url, headers: {
+      'Content-Type': "application/json",
+    });
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      final List<String> documentTypesData =
+          responseData['documentTypes'].cast<String>();
+
+      return documentTypesData;
     } else {
       return [];
     }

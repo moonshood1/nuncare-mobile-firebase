@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Doctor {
   String? id;
   String firebaseId;
@@ -26,6 +24,9 @@ class Doctor {
   String promotion;
   String deviceId;
   bool isActive;
+  bool isPhoneHidden;
+  bool isOrderNumberHidden;
+  String kycStatus;
 
   Doctor({
     this.id,
@@ -53,6 +54,9 @@ class Doctor {
     required this.deviceId,
     required this.university,
     required this.countryUniversity,
+    required this.isOrderNumberHidden,
+    required this.isPhoneHidden,
+    required this.kycStatus,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
@@ -82,6 +86,9 @@ class Doctor {
       promotion: json['promotion'],
       isActive: json['isActive'],
       deviceId: json['deviceId'],
+      isOrderNumberHidden: json['isOrderNumberHidden'],
+      isPhoneHidden: json['isPhoneHidden'],
+      kycStatus: json['kycStatus'],
     );
   }
 
@@ -108,6 +115,9 @@ class Doctor {
       'orderNumber': orderNumber,
       'promotion': promotion,
       'isActive': isActive,
+      "isPhoneHidden": isPhoneHidden,
+      "isOrderNumberHidden": isOrderNumberHidden,
+      "kycStatus": kycStatus,
     };
   }
 
@@ -137,6 +147,9 @@ class Doctor {
       isActive: true,
       deviceId: '',
       promotion: '',
+      isOrderNumberHidden: false,
+      isPhoneHidden: false,
+      kycStatus: 'NOT_STARTED',
     );
   }
 }

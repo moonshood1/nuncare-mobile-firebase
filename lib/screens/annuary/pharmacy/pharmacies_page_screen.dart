@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_pharmacy_card.dart';
-import 'package:nuncare_mobile_firebase/components/my_skeleton.dart';
 import 'package:nuncare_mobile_firebase/models/pharmacy_model.dart';
 import 'package:nuncare_mobile_firebase/screens/annuary/location_screen_page.dart';
+import 'package:nuncare_mobile_firebase/screens/annuary/pharmacy/custom_pharmacies_search_screen_page.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 
 class PharmaciesPageScreen extends StatefulWidget {
@@ -17,12 +18,14 @@ class _PharmaciesPageScreenState extends State<PharmaciesPageScreen> {
   final TextEditingController _searchTextController = TextEditingController();
 
   List<Pharmacy> pharmacies = [];
-  var _isLoading = false;
+  var _isLoading = true;
 
   @override
   void initState() {
-    getPharmaciesFromStore();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getPharmaciesFromStore();
+    });
   }
 
   void getPharmaciesFromStore() async {
@@ -49,6 +52,30 @@ class _PharmaciesPageScreenState extends State<PharmaciesPageScreen> {
 
       List<Pharmacy> response = await _resourceService
           .searchPharmacies(_searchTextController.text.trim());
+
+      setState(() {
+        pharmacies = response;
+        _isLoading = false;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  void _searchPharmaciesWithParametersFromStore(
+    String section,
+    String area,
+  ) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      List<Pharmacy> response =
+          await _resourceService.searchPharmaciesWithParameters(
+        section,
+        area,
+      );
 
       setState(() {
         pharmacies = response;
@@ -94,65 +121,27 @@ class _PharmaciesPageScreenState extends State<PharmaciesPageScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget pharmacieWidget = Center(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Aucune pharmacie trouvée",
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          TextButton(
-            onPressed: getPharmaciesFromStore,
-            child: const Text(
-              "Actualiser la liste",
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          )
-        ],
-      ),
+  void _openCustomSearchModal(BuildContext context) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      isScrollControlled: false,
+      backgroundColor: Colors.white,
+      builder: (ctx) => const CustomPharmacyScreenPage(),
     );
 
-    if (_isLoading && pharmacies.isEmpty) {
-      pharmacieWidget = const Column(
-        children: [
-          MyMedecineCardSkeleton(),
-          SizedBox(height: 8),
-          MyMedecineCardSkeleton(),
-          SizedBox(height: 8),
-          MyMedecineCardSkeleton(),
-          SizedBox(height: 8),
-          MyMedecineCardSkeleton(),
-          SizedBox(height: 8),
-          MyMedecineCardSkeleton(),
-        ],
+    print("resulat du pop : $result");
+
+    if (result != null) {
+      _searchPharmaciesWithParametersFromStore(
+        result['section'] ?? '',
+        result["area"] ?? '',
       );
     }
+  }
 
-    if (pharmacies.isNotEmpty) {
-      pharmacieWidget = Column(
-        children: [
-          ...pharmacies.map(
-            (pharmacy) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyPharmacyCard(
-                pharmacy: pharmacy,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -176,64 +165,87 @@ class _PharmaciesPageScreenState extends State<PharmaciesPageScreen> {
               size: 30,
             ),
           ),
-          // IconButton(
-          //   onPressed: () {
-          //     _openCustomSearchModal(context);
-          //   },
-          //   icon: const Icon(
-          //     Icons.tune,
-          //     size: 30,
-          //   ),
-          // ),
+          IconButton(
+            onPressed: () {
+              _openCustomSearchModal(context);
+            },
+            icon: const Icon(
+              Icons.tune,
+              size: 30,
+            ),
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Retrouvez toutes les pharmacies sur la plateforme en recherchant par nom dans la barre de recherche",
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Retrouvez toutes les pharmacies sur la plateforme en recherchant par section , zone ou emplacement géographique",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: _buildView(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildView() {
+    if (_isLoading) {
+      return const Center(
+        child: MyFadingCircleLoading(),
+      );
+    }
+
+    if (pharmacies.isEmpty) {
+      return Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Aucune pharmacie trouvée",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: getPharmaciesFromStore,
+              child: const Text(
+                "Actualiser la liste",
                 style: TextStyle(
-                  fontSize: 14,
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      controller: _searchTextController,
-                      decoration: InputDecoration(
-                        hintStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        hintText: "Entrez le nom de la pharmacie",
-                        suffixIcon: InkWell(
-                          onTap: _searchPharmaciesFromStore,
-                          child: const Icon(
-                            Icons.search,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              pharmacieWidget
-            ],
-          ),
+            )
+          ],
         ),
-      ),
+      );
+    }
+
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        var pharmacy = pharmacies[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MyPharmacyCard(
+            pharmacy: pharmacy,
+          ),
+        );
+      },
+      itemCount: pharmacies.length,
     );
   }
 }

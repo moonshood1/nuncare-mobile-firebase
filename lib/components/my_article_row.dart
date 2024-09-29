@@ -23,7 +23,7 @@ class MyArticleRow extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           children: [
             Row(
@@ -61,7 +61,7 @@ class MyArticleRow extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     article.img,
-                    height: 100,
+                    height: 50,
                     width: 100,
                   ),
                 ),
@@ -98,7 +98,7 @@ class MyArticleRow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Ecrit le : $formattedDate",
+                      "Rédigé le : $formattedDate",
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w300,

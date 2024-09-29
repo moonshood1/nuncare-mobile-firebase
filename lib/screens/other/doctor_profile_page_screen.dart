@@ -99,7 +99,9 @@ class _DoctorProfilePageScreenState extends State<DoctorProfilePageScreen> {
               title: "Nom complet",
             ),
             MyInfoTile(
-              text: widget.doctor.phone,
+              text: widget.doctor.isPhoneHidden
+                  ? '**********'
+                  : widget.doctor.phone,
               title: "Numéro de téléphone",
             ),
             MyInfoTile(
@@ -123,13 +125,15 @@ class _DoctorProfilePageScreenState extends State<DoctorProfilePageScreen> {
               title: "Nombre d'années d'experience",
             ),
             MyInfoTile(
-              text: widget.doctor.orderNumber,
+              text: widget.doctor.isOrderNumberHidden
+                  ? '**********'
+                  : widget.doctor.orderNumber,
               title: "Numéro d'ordre",
             ),
-            MyInfoTile(
-              text: widget.doctor.district,
-              title: "District",
-            ),
+            // MyInfoTile(
+            //   text: widget.doctor.district,
+            //   title: "District",
+            // ),
             MyInfoTile(
               text: widget.doctor.region,
               title: "Région",

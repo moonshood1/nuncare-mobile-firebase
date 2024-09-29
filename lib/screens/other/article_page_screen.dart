@@ -5,9 +5,9 @@ import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
 import 'package:nuncare_mobile_firebase/models/article_model.dart';
 import 'package:nuncare_mobile_firebase/models/comment_model.dart';
-import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/services/resource_service.dart';
 import 'package:nuncare_mobile_firebase/services/user_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ArticlePageScreen extends StatefulWidget {
   const ArticlePageScreen({super.key, required this.article});
@@ -73,6 +73,23 @@ class _ArticlePageScreenState extends State<ArticlePageScreen> {
       setState(() {
         _commentSendingLoading = false;
       });
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    print(uri);
+
+    try {
+      if (await canLaunchUrl(uri)) {
+        print('the url can be launch');
+        await launchUrl(uri);
+      } else {
+        throw 'Impossible d\'ouvrir le lien $url';
+      }
+    } catch (e) {
+      print("erreur lancement url $e");
     }
   }
 
@@ -215,6 +232,9 @@ class _ArticlePageScreenState extends State<ArticlePageScreen> {
               ),
               Image.network(
                 widget.article.img,
+                height: 250,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
               const SizedBox(
                 height: 20,
@@ -236,6 +256,23 @@ class _ArticlePageScreenState extends State<ArticlePageScreen> {
                   fontSize: 14,
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              widget.article.externalLink != ""
+                  ? InkWell(
+                      onTap: () => _launchURL(widget.article.externalLink!),
+                      child: Text(
+                        widget.article.externalLinkTitle != ""
+                            ? widget.article.externalLinkTitle!
+                            : widget.article.externalLink!,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(
                 height: 20,
               ),

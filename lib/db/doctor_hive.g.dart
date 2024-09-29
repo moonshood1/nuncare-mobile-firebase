@@ -42,13 +42,15 @@ class DoctorHiveAdapter extends TypeAdapter<DoctorHive> {
       promotion: fields[22] as String,
       isActive: fields[24] as bool,
       deviceId: fields[23] as String,
+      isOrderNumberHidden: fields[25] as bool,
+      isPhoneHidden: fields[26] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, DoctorHive obj) {
     writer
-      ..writeByte(25)
+      ..writeByte(27)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -98,7 +100,11 @@ class DoctorHiveAdapter extends TypeAdapter<DoctorHive> {
       ..writeByte(23)
       ..write(obj.deviceId)
       ..writeByte(24)
-      ..write(obj.isActive);
+      ..write(obj.isActive)
+      ..writeByte(25)
+      ..write(obj.isOrderNumberHidden)
+      ..writeByte(26)
+      ..write(obj.isPhoneHidden);
   }
 
   @override

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/screens/other/diary_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/other/medecines_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/other/pharmacies_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 
 class MyDrawer extends StatelessWidget {

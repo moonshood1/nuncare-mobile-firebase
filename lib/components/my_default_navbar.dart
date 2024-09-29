@@ -1,10 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nuncare_mobile_firebase/screens/annuary/annuary_screen_page.dart';
-import 'package:nuncare_mobile_firebase/screens/home/home_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/message/message_page_screen.dart';
-import 'package:nuncare_mobile_firebase/screens/profile/profile_page_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MyDefaultNavbar extends StatelessWidget {
   const MyDefaultNavbar({

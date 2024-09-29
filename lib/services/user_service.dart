@@ -46,6 +46,43 @@ class UserService {
     }
   }
 
+  Future<BasicResponse> submitKyc(Map<String, String> userKycData) async {
+    try {
+      final url = Uri.parse("$usersUri/kyc-submit");
+
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(userKycData),
+      );
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return BasicResponse(
+          success: responseData['success'],
+          message: responseData['message'],
+        );
+      } else {
+        String errorMessage = responseData['message'];
+        throw errorMessage;
+      }
+    } catch (error) {
+      print("Erreur soummission KYC : $error");
+
+      rethrow;
+    }
+  }
+
   Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInformations(
     String userId,
   ) {
@@ -304,6 +341,8 @@ class UserService {
     String description,
     String content,
     String img,
+    String? externalLink,
+    String? externalLinkTitle,
   ) async {
     try {
       final token = await _auth.currentUser?.getIdToken();
@@ -325,7 +364,9 @@ class UserService {
             'title': title,
             'description': description,
             'content': content,
-            'img': img
+            'img': img,
+            'externalLink': externalLink ?? '',
+            'externalLinkTitle': externalLinkTitle ?? ''
           },
         ),
       );
@@ -383,6 +424,44 @@ class UserService {
     } catch (e) {
       print('Erreur modification profil: $e');
       rethrow;
+    }
+  }
+
+  Future<void> toggleHiddensValues({
+    required bool phone,
+    required bool orderNumber,
+  }) async {
+    try {
+      final url = Uri.parse("$usersUri/hidden-values");
+
+      final token = await _auth.currentUser?.getIdToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            "isPhoneHidden": phone,
+            "isOrderNumberHidden": orderNumber,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        return;
+      }
+    } catch (e) {
+      throw Exception(
+          "Erreur lors de la modification des données à cacher : $e");
     }
   }
 

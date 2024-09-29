@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_settings_list_tile.dart';
+import 'package:nuncare_mobile_firebase/models/user_model.dart';
 import 'package:nuncare_mobile_firebase/screens/other/blocked_users_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/other/mask_informations_page_screen.dart';
+import 'package:nuncare_mobile_firebase/screens/profile/kyc_page_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPageScreen extends StatelessWidget {
-  const SettingsPageScreen({super.key});
+  const SettingsPageScreen({
+    super.key,
+    required this.doctor,
+  });
+  final Doctor doctor;
 
   void deleteUserAccount(BuildContext context) async {
     bool confirm = await showDialog(
@@ -103,19 +110,43 @@ class SettingsPageScreen extends StatelessWidget {
               ),
             ),
             MySettingsListTile(
+              title: 'Vérifier mon profil',
+              color: doctor.kycStatus == 'NOT_STARTED'
+                  ? Colors.red.shade300
+                  : doctor.kycStatus == 'PENDING'
+                      ? Colors.orange.shade300
+                      : Colors.green.shade300,
+              textColor: Colors.white,
+              action: IconButton(
+                onPressed: () {
+                  if (doctor.kycStatus == 'NOT_STARTED') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => const KycPageScreen(),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            MySettingsListTile(
               title: 'Masquer mes informations',
               color: Colors.grey.shade200,
               textColor: Colors.grey.shade600,
               action: IconButton(
-                // onPressed: () {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (ctx) => BlockedUsersPageScreen(),
-                //     ),
-                //   );
-                // },
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => const MaskInformationsPageScreen(),
+                    ),
+                  );
+                },
                 icon: Icon(
                   Icons.arrow_forward,
                   color: Colors.grey.shade500,
@@ -131,7 +162,7 @@ class SettingsPageScreen extends StatelessWidget {
             //       deleteUserAccount(context);
             //     },
             //     icon: const Icon(
-            //       Icons.arrow_forward,
+            //       Icons.close,
             //       color: Colors.white,
             //     ),
             //   ),

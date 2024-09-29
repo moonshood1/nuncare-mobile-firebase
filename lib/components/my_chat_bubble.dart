@@ -109,7 +109,7 @@ class MyChatBubble extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Bloquer l'utilisateur le message"),
+        title: const Text("Bloquer l'utilisateur"),
         content: const Text(
           'Vous etes sur de vouloir bloquer cet utilisateur ?',
           style: TextStyle(

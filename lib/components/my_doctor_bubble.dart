@@ -8,8 +8,8 @@ class MyDoctorBubble extends StatelessWidget {
   final Doctor doctor;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 30),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GestureDetector(
         onTap: () => Navigator.push(
           context,
@@ -23,7 +23,7 @@ class MyDoctorBubble extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage(doctor.img),
-              radius: 30,
+              radius: 25,
             ),
             const SizedBox(
               height: 10,

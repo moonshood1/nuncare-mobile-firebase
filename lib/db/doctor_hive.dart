@@ -79,6 +79,12 @@ class DoctorHive extends HiveObject {
   @HiveField(24)
   bool isActive;
 
+  @HiveField(25)
+  bool isOrderNumberHidden;
+
+  @HiveField(26)
+  bool isPhoneHidden;
+
   DoctorHive({
     this.id,
     required this.firebaseId,
@@ -105,5 +111,7 @@ class DoctorHive extends HiveObject {
     required this.promotion,
     required this.isActive,
     required this.deviceId,
+    required this.isOrderNumberHidden,
+    required this.isPhoneHidden,
   });
 }

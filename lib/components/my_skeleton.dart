@@ -134,7 +134,7 @@ class MyMedecineCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      width: double.infinity,
+      width: 450,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
