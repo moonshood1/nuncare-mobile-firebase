@@ -40,7 +40,7 @@ class MyAccountDrawer extends StatelessWidget {
                   );
                 },
                 leading: Image.asset(
-                  'assets/icons/medi.png',
+                  'assets/icons/ecrire.png',
                   width: 30,
                 ),
                 title: const Text(
@@ -60,7 +60,7 @@ class MyAccountDrawer extends StatelessWidget {
                   );
                 },
                 leading: Image.asset(
-                  'assets/icons/pharmacie.png',
+                  'assets/icons/editer.png',
                   width: 30,
                 ),
                 title: const Text(
@@ -80,7 +80,7 @@ class MyAccountDrawer extends StatelessWidget {
                   );
                 },
                 leading: Image.asset(
-                  'assets/icons/article.png',
+                  'assets/icons/parametres.png',
                   width: 30,
                 ),
                 title: const Text(
@@ -94,7 +94,7 @@ class MyAccountDrawer extends StatelessWidget {
               ListTile(
                 onTap: _logout,
                 leading: Image.asset(
-                  'assets/icons/deconnexion.png',
+                  'assets/icons/se-deconnecter.png',
                   width: 30,
                 ),
                 // const Icon(Icons.logout),

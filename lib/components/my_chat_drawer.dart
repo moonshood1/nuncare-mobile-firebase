@@ -36,7 +36,7 @@ class MyChatDrawer extends StatelessWidget {
                   );
                 },
                 leading: Image.asset(
-                  'assets/icons/article.png',
+                  'assets/icons/bloquer-un-utilisateur.png',
                   width: 30,
                 ),
                 title: const Text(

@@ -37,7 +37,7 @@ class MyAnnuaryDrawer extends StatelessWidget {
                   );
                 },
                 leading: Image.asset(
-                  'assets/icons/medi.png',
+                  'assets/icons/medicament.png',
                   width: 30,
                 ),
                 title: const Text(

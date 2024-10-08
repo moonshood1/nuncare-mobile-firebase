@@ -139,9 +139,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               );
             },
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.black,
+            icon: Image.asset(
+              'assets/icons/bouton-notifications.png',
+              width: 25,
             ),
           ),
           IconButton(
@@ -153,9 +153,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               );
             },
-            icon: const Icon(
-              Icons.newspaper,
-              color: Colors.black,
+            icon: Image.asset(
+              'assets/icons/un-journal.png',
+              width: 25,
             ),
           ),
         ],
@@ -171,19 +171,19 @@ class _HomePageScreenState extends State<HomePageScreen> {
             children: [
               _buildArticleList(articles),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               _buildAdCarouselSlider(),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               _buildMedecineList(medecines),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               _buildLastRegisteredDoctors(doctors),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
             ],
           ),
@@ -240,8 +240,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
         Row(
           children: [
             Image.asset(
-              'assets/icons/article.png',
-              width: 20,
+              'assets/icons/journal.png',
+              width: 30,
             ),
             const SizedBox(
               width: 10,
@@ -319,8 +319,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
         Row(
           children: [
             Image.asset(
-              'assets/icons/medi.png',
-              width: 20,
+              'assets/icons/medicament.png',
+              width: 30,
             ),
             const SizedBox(
               width: 10,
@@ -374,8 +374,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
         Row(
           children: [
             Image.asset(
-              'assets/icons/doctors.png',
-              width: 20,
+              'assets/icons/assistance-medicale.png',
+              width: 30,
             ),
             const SizedBox(
               width: 10,
@@ -405,11 +405,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
             scrollDirection: Axis.horizontal,
           ),
         ),
-        const SizedBox(height: 10),
-        _buildRedirectionButton(
-          "Consulter l'annuaire",
-          const AnnuaryPageScreen(),
-        ),
+        // const SizedBox(height: 10),
+        // _buildRedirectionButton(
+        //   "Consulter l'annuaire",
+        //   const AnnuaryPageScreen(),
+        // ),
       ],
     );
   }

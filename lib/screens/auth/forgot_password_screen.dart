@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare_mobile_firebase/components/my_textfield.dart';
+import 'package:nuncare_mobile_firebase/screens/auth/login_screen.dart';
 import 'package:nuncare_mobile_firebase/screens/auth/register_screen.dart';
 import 'package:nuncare_mobile_firebase/services/auth_service.dart';
 import 'package:nuncare_mobile_firebase/validators/email_validator.dart';
+import 'package:nuncare_mobile_firebase/components/my_loading.dart';
 
 class ForgotPwScreen extends StatefulWidget {
   const ForgotPwScreen({super.key});
@@ -30,7 +32,19 @@ class _ForgotPwScreenState extends State<ForgotPwScreen> {
       final String? emailError = validateEmail(_emailController.text);
 
       if (emailError != null) {
-        // Afficher un message d'erreur ou réaliser toute autre action pour indiquer à l'utilisateur que le champ email est invalide
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red.shade200,
+            content: const Text(
+              "L'adresse email n'est pas valide",
+            ),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+
         return;
       }
 
@@ -43,17 +57,37 @@ class _ForgotPwScreenState extends State<ForgotPwScreen> {
       setState(() {
         _isLoading = false;
       });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => const LoginScreen(),
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green.shade200,
+          content: const Text(
+            "Un email vous a été envoyé pour reinitialiser votre mot de passe",
+          ),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+
+      return;
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
       print(e);
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade200,
+          content: Text(
             e.toString(),
           ),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -110,31 +144,34 @@ class _ForgotPwScreenState extends State<ForgotPwScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => _submit(context),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 2,
-                      foregroundColor: Colors.white,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 10,
+                _isLoading
+                    ? const MyLoadingCirle()
+                    : SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => _submit(context),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 2,
+                            foregroundColor: Colors.white,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            "Continuer",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      "Continuer",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 40,
                 ),
