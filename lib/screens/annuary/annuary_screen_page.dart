@@ -172,9 +172,11 @@ class _AnnuaryPageScreenState extends State<AnnuaryPageScreen> {
 
   @override
   void initState() {
-    getInformationsFromStore();
-    getDoctorsFromStore();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getInformationsFromStore();
+      getDoctorsFromStore();
+    });
   }
 
   @override

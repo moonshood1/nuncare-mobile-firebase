@@ -6,7 +6,7 @@ String convertTimestamp(Timestamp timestamp) {
   DateTime date = timestamp.toDate();
 
   // Formater la DateTime en chaîne au format HH:mm
-  String formattedTime = DateFormat('HH:mm').format(date);
+  String formattedTime = DateFormat('dd/MM HH:mm').format(date);
 
   return formattedTime;
 }

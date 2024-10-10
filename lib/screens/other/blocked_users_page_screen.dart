@@ -85,7 +85,7 @@ class BlockedUsersPageScreen extends StatelessWidget {
         if (blockedUsers.isEmpty) {
           return const Center(
             child: Text(
-              "Aucune utilisateur bloqué pour l'instant ",
+              "Aucun utilisateur bloqué pour l'instant ",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
             ),
           );

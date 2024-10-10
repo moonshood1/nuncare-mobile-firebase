@@ -142,10 +142,6 @@ class MyChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedTime = convertTimestamp(messageTime);
-
-    bool isDarkMode =
-        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
-
     return GestureDetector(
       onLongPress: () {
         if (!isCurrentUser) {
