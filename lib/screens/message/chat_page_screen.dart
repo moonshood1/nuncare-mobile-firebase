@@ -75,8 +75,8 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         title: Text(
           widget.receiverName,
           style: const TextStyle(

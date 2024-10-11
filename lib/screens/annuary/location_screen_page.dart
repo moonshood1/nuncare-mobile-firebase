@@ -23,7 +23,7 @@ class _LocationScreenPageState extends State<LocationScreenPage> {
     if (_lng == 0 && _lat == 0) {
       return '';
     }
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$_lat,$_lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$_lat,$_lng&key=AIzaSyARiGmPVVIIwOnAaQAPPyzTTlNaM3TTsLg';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$_lat,$_lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$_lat,$_lng&key=AIzaSyBs4oxxUB5ELFbpa5TJUGSGT3XyTFViEPM';
   }
 
   void _getCurrentLocation() async {
@@ -60,12 +60,13 @@ class _LocationScreenPageState extends State<LocationScreenPage> {
       final lng = locationData.longitude;
 
       final url = Uri.parse(
-          "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&location_type=ROOFTOP&result_type=street_address&key=AIzaSyARiGmPVVIIwOnAaQAPPyzTTlNaM3TTsLg");
+          "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&location_type=ROOFTOP&result_type=street_address&key=AIzaSyBs4oxxUB5ELFbpa5TJUGSGT3XyTFViEPM");
 
       final response = await http.get(url);
 
       final resData = json.decode(response.body);
 
+      print("resDATAAA $resData");
       setState(() {
         _pickedAddress = resData['plus_code']['compound_code'];
         _lng = lng;

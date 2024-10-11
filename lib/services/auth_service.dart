@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:nuncare_mobile_firebase/constants/uris.dart';
+import 'package:nuncare_mobile_firebase/services/notification_service.dart';
 
 class BasicResponse {
   final bool success;
@@ -32,6 +33,8 @@ class AuthService {
         password: password,
       );
 
+      NotificationService().setupTokenListeners();
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       print("ERROR SIGN IN ");
@@ -55,6 +58,8 @@ class AuthService {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        NotificationService().setupTokenListeners();
+
         return BasicResponse(
           success: responseData['success'],
           message: responseData['message'],
@@ -70,6 +75,12 @@ class AuthService {
   }
 
   Future<void> signOut() async {
+    String? userId = _auth.currentUser?.uid;
+
+    if (userId != null) {
+      await NotificationService().clearTokenOnLogout(userId);
+    }
+
     return await _auth.signOut();
   }
 

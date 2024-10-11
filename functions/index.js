@@ -26,8 +26,8 @@ exports.sendNotificationmessage = functions.firestore
       const messagePayload = {
         token: token,
         notification: {
-          title: "Nouveau message",
-          body: "${message.senderEmail} dit : ${message.message}",
+          title: message.senderEmail,
+          body: message.message,
         },
         android: {
           notification: {
