@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription<key/>
-	<string>Designez votre position</string>
+	<string>Nuncare aimerait accéder à votre position</string>
 	<key>NSPhotoLibraryUsageDescription<key/>
 	<string>Choisissez une image dans votre galerie</string>
 	<key>NSCameraUsageDescription<key/>

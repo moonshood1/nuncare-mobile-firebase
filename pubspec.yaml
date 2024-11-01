@@ -1,5 +1,5 @@
 name: nuncare_mobile_firebase
-description: "A new Flutter project."
+description: "The Nuncare mobile application."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -123,17 +123,19 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/logo_nuncare.png"
+  image_path: assets/images/logo_launch.jpg
+  # adaptive_icon_foreground: assets/images/logo_launch.jpg
+  adaptive_icon_background: "#FF00BA"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/images/logo_nuncare.png"
+    image_path: assets/images/logo_launch.jpg
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/images/logo_nuncare.png"
+    image_path: assets/images/logo_launch.jpg
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/logo_nuncare.png"
+    image_path: assets/images/logo_launch.jpg
