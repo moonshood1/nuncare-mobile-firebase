@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "pro.nuncare.nuncare"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -40,6 +40,14 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    defaultConfig {
+        applicationId "pro.nuncare.nuncare"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 2
+        versionName "1.1"
     }
 
     sourceSets {
