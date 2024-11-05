@@ -1,4 +1,4 @@
-package com.example.nuncare_mobile_firebase
+package pro.nuncare.nuncare
 
 import io.flutter.embedding.android.FlutterActivity
 
