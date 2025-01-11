@@ -182,8 +182,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // "district": _selectedDistrict!,
         "region": _selectedRegion ?? '',
         "city": _selectedCity ?? '',
-        'password': _pwController.text.trim()
+        'password': _pwController.text.trim(),
+        'university': _selectedUniversity ?? '',
+        'hospital': _hospitalController.text.trim(),
       };
+
+      print('user DATAAAAA $userData');
+
+      return;
 
       BasicResponse response = await _auth.signUp(userData);
 
